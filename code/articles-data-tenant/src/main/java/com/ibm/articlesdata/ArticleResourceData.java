@@ -95,7 +95,6 @@ public class ArticleResourceData {
         Object issuer = this.accessToken.getClaim("iss");
         System.out.println("-->log: com.ibm.articles.ArticlesResource.getArticles issuer A: " + issuer.toString());
         System.out.println("-->log: com.ibm.articles.ArticlesResource.getArticles articles A: " + articles.toArray().toString());
-        //getCloudantData();
         return articles;
     }
 
@@ -116,7 +115,8 @@ public class ArticleResourceData {
     @PostConstruct
     void addArticles() {
         System.out.println("-->log: com.ibm.articles.ArticleResource.addArticles");
-        getCloudantData();
+        //getCloudantData();
+        addSampleArticles();
     }
 
     private void addArticle(String title, String url, String author) {
@@ -125,6 +125,23 @@ public class ArticleResourceData {
         article.url = url;
         article.authorName = author;
         articles.add(article);
+    }
+
+    private void addSampleArticles() {
+        System.out.println("-->log: com.ibm.articles.ArticlesResource.addSampleArticles");
+        
+        // 1. Select tenant  =================================================
+        String query="";
+        String tenant =  tenantJSONWebToken();
+        System.out.println("-->log: com.ibm.articles.ArticleResourceData.getCloudantData tenant: " + tenant);
+               
+        if ("tenantA".equals(tenant)){
+            addArticle("Blue Cloud Mirror — (Don’t) Open The Doors! (at blog.de - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele");
+        } 
+               
+        if ("tenantB".equals(tenant)){
+            addArticle("Blue Cloud Mirror — (Don’t) Open The Doors! (at blog.com - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele");
+        }
     }
 
     private void getCloudantData() {
@@ -147,7 +164,6 @@ public class ArticleResourceData {
         if ("tenantB".equals(tenant)){
             query = queryB;
         }
-
 
         // 3. Get articles query in database =================================
         PostSearchOptions searchOptions = new PostSearchOptions.Builder()
