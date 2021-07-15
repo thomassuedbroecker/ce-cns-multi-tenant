@@ -67,8 +67,12 @@ The gif shows a basic overview of following sequence:
 
 ### Environment
 
-* Mac OS
-* VS Code
+* Local
+    * Mac OS
+    * VS Code
+    * Java: openjdk version "11.0.11"
+    * Docker: 3.4
+    * Apache Maven: 3.8.1
 
 ### Plan
 
@@ -77,3 +81,39 @@ The gif shows a basic overview of following sequence:
 |Get it working on the local machine | **done** | simplified for the basic Use Case  |
 | Deploy it to Code Engine | **open** |   |
 | redefine the usecase and technology | **open** |   |
+
+### Examples
+
+If you have installed:
+* Java: openjdk version "11.0.11"
+* Docker: 3.4
+* Apache Maven: 3.8.1
+
+You should be able to simply run the example:
+
+```sh
+git clone https://github.com/thomassuedbroecker/ce-cns-multi-tenant
+cd ce-cns-multi-tenant
+cd CE
+bash local-start-tenant.sh
+```
+
+This will start:
+
+* seven terminals 
+    * Keycloak (port 8282)
+    * Web-App select (port 8080)
+    * Web-App tenant A (port 8081)
+    * Web-App tenant B (port 8082)
+    * Web-API microservice (port 8083)
+    * Articles microservice (port 8084)
+    * Auto configuration of Keycloak 
+
+The image below shows the terminal sessions:
+
+![](./documentation/images/local-example.png)
+
+* two browser sessions
+
+  * Web-App select `http://localhost:8080/`
+  * Keycloak admin `http://localhost:8282/` (admin/admin)
