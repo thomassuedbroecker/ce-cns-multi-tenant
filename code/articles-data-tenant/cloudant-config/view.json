@@ -1,0 +1,9 @@
+{
+    "_id": "_design/_articles",
+    "views": {
+      "view-articles": {
+        "map": "function (doc) {\n if (doc.type === \"articles\"){\n    emit(doc._id, doc.authorName, doc.title, doc.url);\n }\n}"
+      }
+    },
+    "language": "javascript"
+}

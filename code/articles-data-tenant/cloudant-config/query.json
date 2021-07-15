@@ -1,0 +1,12 @@
+{
+  "_id": "_design/_d_i_articles",
+  "_rev": "6-3e86754a6c1c8f55947213e0656d0574",
+  "views": {},
+  "language": "javascript",
+  "indexes": {
+    "_idx_articles": {
+      "analyzer": "standard",
+      "index": "function (doc) {\n  index(\"default\", doc._id);\n  \n  /*************\n    log  related\n   *************/\n\n  if(doc.type){\n    index(\"theType\", doc.type, {\"store\": true, \"facet\":true});\n  }\n  if(doc.authorName){\n    index(\"theAuthorName\", doc.authorName, {\"store\": true, \"facet\":true });\n  }\n  if(doc.title){\n    index(\"theTitle\", doc.title, {\"store\": true, \"facet\":true});\n  }\n  \n  if(doc.url){\n    index(\"theUrl\", doc.url, {\"store\": true, \"facet\":true});\n  }\n  \n  if(doc.customer){\n    index(\"theCustomer\", doc.customer, {\"store\": true, \"facet\":true});\n  }\n}"
+    }
+  }
+}
