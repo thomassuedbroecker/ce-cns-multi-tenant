@@ -18,6 +18,9 @@ nav:
   - Optional Labs: 
     - 1. TBD: ./optional-lab-tbd.md
   - Additional Resources:
+    - Implementation details:
+       - Vue.js extract domain from email: details-email-domain.md 
+       - Extract tenant and reconfigure OIDC configuration: details-quarkus-extract-tenant.md
     - Cloud Native Starter example:
        - Cloud-Native-Starter project: https://github.com/IBM/cloud-native-starter
        - Cloud-Native-Starter project security: https://github.com/IBM/cloud-native-starter/security

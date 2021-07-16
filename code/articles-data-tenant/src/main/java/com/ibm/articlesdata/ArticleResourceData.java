@@ -133,7 +133,7 @@ public class ArticleResourceData {
         // 1. Select tenant  =================================================
         String query="";
         String tenant =  tenantJSONWebToken();
-        System.out.println("-->log: com.ibm.articles.ArticleResourceData.getCloudantData tenant: " + tenant);
+        System.out.println("-->log: com.ibm.articles.ArticleResourceData.addSampleArticles tenant: " + tenant);
                
         if ("tenantA".equals(tenant)){
             addArticle("Blue Cloud Mirror — (Don’t) Open The Doors! (at blog.de - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele");

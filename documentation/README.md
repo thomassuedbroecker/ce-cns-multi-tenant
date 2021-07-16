@@ -114,6 +114,7 @@ The example should use following technologies.
         * Java: openjdk version "11.0.11"
         * Docker: "3.4"
         * Apache Maven: "3.8.1"
+        * Vue.js: vue/cli "4.5.13"
 
 #### Steps
 
