@@ -65,11 +65,11 @@ The gif shows a basic overview of following sequence:
 
     3. One Identity and Access Management system
 
-       * Keycloak with two custom realms
+        * Keycloak with two custom realms
 
     4. One database service on IBM Cloud
 
-       * Cloudant with one Database       
+        * Cloudant with one Database       
 
 ### Technologies
 
