@@ -1,6 +1,6 @@
 # Vue.js
 
-Extract email domain in [Tenant.vue](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-app-select/src/components/Tenant.vue)
+Extract email domain in component [Tenant.vue](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-app-select/src/components/Tenant.vue) of the `web-app select`.
 
 
 * Simple steps:
@@ -9,6 +9,7 @@ Extract email domain in [Tenant.vue](https://github.com/thomassuedbroecker/ce-cn
     2. Lower all cases
     3. Split string
     4. Verify result
+    5. Invoke the right `web-app` for the given tenant
 
 Relevant code in [Tenant.vue](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-app-select/src/components/Tenant.vue).
 
@@ -24,7 +25,7 @@ Relevant code in [Tenant.vue](https://github.com/thomassuedbroecker/ce-cns-multi
            var result = domain[1].localeCompare("blog.de");
            console.log("--> log : result ", result);
            if ( 0 == domain[1].localeCompare("blog.de")) {   
-              // Invoke tenant
+              // Invoke tenant web-app
               console.log("--> log : tenant ", domain[1]);
               console.log("--> log : A ", window.VUE_TENANT_A);
               window.open(window.VUE_TENANT_A, "Tenant A");
