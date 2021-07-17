@@ -142,7 +142,7 @@ This bash script will start:
     * Web-App tenant B (port 8082)
     * Web-API microservice (port 8083)
     * Articles microservice (port 8084)
-    * Auto configuration of Keycloak 
+    * Auto configuration of Keycloak (**waits 1 min befor it starts**)
 
 The image below shows the terminal sessions:
 

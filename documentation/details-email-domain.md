@@ -4,11 +4,11 @@ Extract email domain in [Tenant.vue](https://github.com/thomassuedbroecker/ce-cn
 
 
 * Simple steps:
-  
-  1. Regular expression
-  2. Lower all cases
-  3. Split string
-  4. Verify result
+    
+    1. Regular expression
+    2. Lower all cases
+    3. Split string
+    4. Verify result
 
 Relevant code in [Tenant.vue](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-app-select/src/components/Tenant.vue).
 
