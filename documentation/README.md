@@ -149,9 +149,8 @@ The image below shows the terminal sessions:
 ![](images/local-example.png)
 
 * two browser sessions
-
-  * Web-App select `http://localhost:8080/` 
-  * Keycloak admin `http://localhost:8282/` (admin/admin)
+    * Web-App select `http://localhost:8080/` 
+    * Keycloak admin `http://localhost:8282/` (admin/admin)
 
 ##### Step 3: Select a tenant by inserting a email address in the `Web-App select` 
 
