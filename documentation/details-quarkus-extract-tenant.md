@@ -3,7 +3,7 @@
 Simply implementation for the web-api service.
 
 1. Provide  REST endpoint for each tenant
-2. Extract with endpoint was invoked and set the right configuration for the tenant, that means in this case the Keycloak realm.
+2. Extract inside the invoked endpoint  the JWT and set the right configuration for the given tenant, that means in this case the Keycloak realm.
 3. Based on the known tenant invoke the right endpoint of the articles service.
     1. Create REST client for each tenant
     2. Invoke the right client
