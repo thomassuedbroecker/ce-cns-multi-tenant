@@ -3,7 +3,7 @@
 Simply implementation for the web-api service.
 
 1. Provide  REST endpoint for each tenant
-2. Extract inside the invoked endpoint  the JWT and set the right configuration for the given tenant, that means in this case the Keycloak realm.
+2. Extract inside the invoked endpoint the JWT access-token and set the right configuration for the given tenant, that means in this case the Keycloak realm.
 3. Based on the known tenant invoke the right endpoint of the articles service.
     1. Create REST client for each tenant
     2. Invoke the right client
@@ -49,7 +49,9 @@ Relevant code in [ArticleResource.java](https://github.com/thomassuedbroecker/ce
     }
 ```
 
-### Extract with endpoint was invoked and set the right configuration for the tenant, that means in this case the Keycloak realm.
+###  Extract JWT access-token and set the right configuration
+
+Extract inside the invoked endpoint the JWT access-token and set the right configuration for the given tenant, that means in this case the Keycloak realm.
 
 Relevant code in [CustomTenantConfigResolver.java](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-api-tenant/src/main/java/com/ibm/webapi/CustomTenantConfigResolver.java) of the web-api service.
 
