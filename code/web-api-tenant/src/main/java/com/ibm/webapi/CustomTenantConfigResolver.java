@@ -36,7 +36,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 
             System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + config.toString());
 
-
             // any other setting support by the quarkus-oidc extension
 
             return config;

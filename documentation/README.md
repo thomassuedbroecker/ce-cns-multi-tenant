@@ -129,6 +129,8 @@ cd ce-cns-multi-tenant/CE
 
 ##### Step 2: Start the example with a bash script
 
+
+
 ```sh
 bash local-start-tenant.sh
 ```

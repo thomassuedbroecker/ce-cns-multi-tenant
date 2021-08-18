@@ -14,5 +14,10 @@
     "createdDate" : 1554245879116,
     "config" : { }
   } ],
+ "disableableCredentialTypes" : [ "password" ],
+ "requiredActions" : [ ],
  "realmRoles" : [ "user" ],
- "username":"alice"}
+ "notBefore" : 0,
+ "groups" : [ ],
+ "username":"alice"
+}

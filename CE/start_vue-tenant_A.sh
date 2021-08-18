@@ -1,7 +1,10 @@
 #!/bin/bash
-export HOME_PATH=/Users/thomassuedbroecker/Downloads/dev/ce-cns-private/CE
+export HOME_PATH_NEW=$HOME_PATH
+echo "************************************"
+echo "$HOME_PATH_NEW and $HOME_PATH"
+echo "************************************"
 export APP_NAME=web-app-tenant-a
-export WEB_APP="$HOME_PATH/../code/$APP_NAME"
+export WEB_APP="$HOME_PATH_NEW/../code/$APP_NAME"
 export MESSAGE="Starting 'Tenant-A Web-App'"
 
 echo "************************************"
