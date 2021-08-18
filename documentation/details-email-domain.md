@@ -2,10 +2,9 @@
 
 Extract email domain in component [Tenant.vue](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-app-select/src/components/Tenant.vue) of the `web-app select`.
 
-
 * Simple steps:
     
-    1. Regular expression
+    1. Use of regular expression
     2. Lower all cases
     3. Split string
     4. Verify result

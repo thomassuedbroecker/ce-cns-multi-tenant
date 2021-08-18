@@ -2,11 +2,13 @@
 
 Simply implementation for the web-api service.
 
-1. Provide  REST endpoint for each tenant
+1. Provide a REST endpoint for each tenant
 2. Extract inside the invoked endpoint the JWT access-token and set the right configuration for the given tenant, that means in this case the Keycloak realm.
-3. Based on the known tenant invoke the right endpoint of the articles service.
+3. Based on the known tenant invoke the right endpoint of the `articles service`.
     1. Create REST client for each tenant
     2. Invoke the right client
+
+![](images/very-basic-extract-tenant-quarkus.png)
 
 
 ### Provide  REST endpoint for each tenant
