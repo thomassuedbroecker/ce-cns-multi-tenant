@@ -175,6 +175,6 @@ Because this will clear the saved cookie in the browser from `Keycloak`.
 
   - User: `admin` Password: `admin`
 
-Verify the to realm configurations.
+Verify the two realm configurations tenant-a and tenant-b.
 
 
