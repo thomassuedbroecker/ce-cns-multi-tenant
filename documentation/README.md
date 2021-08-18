@@ -165,10 +165,16 @@ The image below shows the terminal sessions:
 
   - User: `alice` Password: `alice`
 
-##### Step 5: Login to `Keycloak`
+##### Step 5: Logout from `tenant a` or `tenant b`
+
+Because this will clear the saved cookie in the browser from `Keycloak`.
+
+##### Step 6: Login to `Keycloak` master realm
 
   Use following:
 
   - User: `admin` Password: `admin`
+
+Verify the to realm configurations.
 
 
