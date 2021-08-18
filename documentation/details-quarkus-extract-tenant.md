@@ -15,6 +15,11 @@ Simply implementation for the web-api service.
 
 Relevant code in [ArticleResource.java](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-api-tenant/src/main/java/com/ibm/webapi/ArticleResource.java) of the web-api service.
 
+In this case two endpoints:
+
+* `@Path("/articlesA")`
+* `@Path("/articlesB")`
+
 ```java
    @GET
     @Path("/articlesA")
@@ -56,6 +61,9 @@ Relevant code in [ArticleResource.java](https://github.com/thomassuedbroecker/ce
 Extract inside the invoked endpoint the JWT access-token and set the right configuration for the given tenant, that means in this case the Keycloak realm.
 
 Relevant code in [CustomTenantConfigResolver.java](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-api-tenant/src/main/java/com/ibm/webapi/CustomTenantConfigResolver.java) of the web-api service.
+
+* `"articlesA".equals(parts[1])`
+* `"articlesB".equals(parts[1])`
 
 ```java
 package com.ibm.webapi;

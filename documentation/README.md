@@ -129,15 +129,12 @@ cd ce-cns-multi-tenant/CE
 
 ##### Step 2: Start the example with a bash script
 
-
-
 ```sh
 bash local-start-tenant.sh
 ```
 
-This bash script will start:
-
-* Seven terminals 
+This bash script will start seven terminals:
+ 
     * Keycloak (port 8282)
     * Web-App select (port 8080)
     * Web-App tenant A (port 8081)
