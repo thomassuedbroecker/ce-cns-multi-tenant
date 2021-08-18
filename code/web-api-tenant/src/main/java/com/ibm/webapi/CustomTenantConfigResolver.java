@@ -43,10 +43,10 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
         }
 
         if ("articlesB".equals(parts[1])) {
-            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve");           
+            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve tenant B: ");           
             OidcTenantConfig config = new OidcTenantConfig();
  
-            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve issuer: " + config.getToken().getIssuer().toString());
+            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve issuer B : " + config.getToken().getIssuer().toString());
             
             config.setTenantId("tenantB");
             config.setAuthServerUrl("http://localhost:8282/auth/realms/tenantB");
