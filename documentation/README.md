@@ -73,7 +73,7 @@ The gif shows a basic overview of following sequence:
 
 ### Technologies
 
-The example should use following technologies.
+The example application currently uses following technologies.
 
 * Identity and Access Management
 
@@ -83,12 +83,16 @@ The example should use following technologies.
 
     * [Cloudant](https://www.ibm.com/cloud/cloudant)
 
+* Multi Tenancy
+ 
+    * [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy)
+
 * Microservies
 
     * [Quarkus](https://quarkus.io)
     * Java
 
-* Web fronted:
+* Web frontend:
 
     * [Vue.js](https://vuejs.org) (Web front end)
     * JavaScript

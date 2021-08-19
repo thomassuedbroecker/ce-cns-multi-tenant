@@ -1,5 +1,72 @@
 # Extract tenant and reconfigure OIDC configuration
 
+###  Objective¶
+
+I wanted to get started to implement an very simple microservices based application example for multi tenancy. With a basic use case defined for this example application.
+
+The starting point from the technical and usage perspective is this workshop [`Get started to deploy a Java Microservices application to Code Engine`](https://suedbroecker.net/2021/05/28/new-hands-on-workshop-get-started-to-deploy-a-java-microservices-application-to-code-engine/).
+
+### Basic Use Case
+
+This is the simple basic use case defined in the first step for the example application.
+
+#### Short Description 
+
+Get articles displayed based on your email domain, user role and user authentication and authorization.
+
+#### Basic Flow
+
+1. Insert email address
+2. Based on the domain of your email address you are routed to the right tenant ( example `blog.de` and `blog.com`)
+3. Login to the right realm on the Identity and Access Management system
+4. The articles are displayed according to the user role and tenant.
+
+* Example basic flow implementation (local machine)
+
+![](images/very-basic-mulit-tenant.gif)
+
+### Architecture
+
+![](images/very-basic-mulit-tenant-diagram.gif)
+
+The gif shows a basic overview of the dependencies in following sequence:
+
+1. Invoke `web-app-select` on `port 8080` and insert your email to select the domain for the tenant ((blog.de == tenantA) and (blog.com == tenantA))
+
+2. The related webfronted for `blog.de` is invoked, it's `web-app-tenant-a` (`port 8081`) that redirects to the right Keycloak realm (tenant-A) which provides the login and returns the access-token. We use that token to access the `web-api` microservice (`port 8083`). Therefor we invoke the `web-api` REST endpoint related to the right tenant (realm), in this case it's tenant-a. (`user:alice;role:user` in both realms)
+
+3. The microservice `web-api` uses the the functionalities for multitenancy [provided by Quarkus](https://quarkus.io/guides/security-openid-connect-multitenancy) for the **validation of the access token** at right Keycloak realm and **forwards the given access-token** to the microservice articles, by using the right REST endpoint for the given tenant.
+
+4. The `articles` microservice does the same validation as `web-api` using [Quarkus](https://quarkus.io/guides/security-openid-connect-multitenancy) and uses the right query to provide the needed articles data from the Cloudant database.
+
+### Technologies
+
+The example application currently uses following technologies.
+
+* Identity and Access Management
+
+    * [Keycloak](https://www.keycloak.org)
+
+* (optional a Database)
+
+    * [Cloudant](https://www.ibm.com/cloud/cloudant)
+
+* Multi Tenancy
+ 
+    * [ Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy)
+    
+* Microservies
+
+    * [Quarkus](https://quarkus.io)
+    * 
+    * Java
+
+* Web frontend:
+
+    * [Vue.js](https://vuejs.org) (Web front end)
+    * JavaScript
+
+
 Simply implementation for the web-api service.
 
 1. Provide a REST endpoint for each tenant
