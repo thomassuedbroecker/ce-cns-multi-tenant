@@ -94,7 +94,7 @@ The example application currently uses following technologies.
 
 * Web frontend:
 
-    * [Vue.js](https://vuejs.org) (Web front end)
+    * [Vue.js](https://vuejs.org) (Web frontend)
     * JavaScript
 
 * Example setup automation

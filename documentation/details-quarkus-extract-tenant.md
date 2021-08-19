@@ -39,32 +39,22 @@ The gif shows a basic overview of the dependencies in following sequence:
 
 4. The `articles` microservice does the same validation as `web-api` using [Quarkus](https://quarkus.io/guides/security-openid-connect-multitenancy) and uses the right query to provide the needed articles data from the Cloudant database.
 
+### Multi Tenancy realization
+
+* Varibale frontends for each domain
+* Microservice using [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy)
+* Database will have an editional entry to seperate the domains
+* Identity and access management will be manage be different Keycloak realms
+
 ### Technologies
 
 The example application currently uses following technologies.
 
-* Identity and Access Management
-
-    * [Keycloak](https://www.keycloak.org)
-
-* (optional a Database)
-
-    * [Cloudant](https://www.ibm.com/cloud/cloudant)
-
-* Multi Tenancy
- 
-    * [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy)
-
-* Microservies
-
-    * [Quarkus](https://quarkus.io)
-    * Java
-
-* Web frontend:
-
-    * [Vue.js](https://vuejs.org) (Web front end)
-    * JavaScript
-
+* Identity and Access Management ([Keycloak](https://www.keycloak.org))
+* Multi Tenancy ([Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy))
+* Microservies ([Quarkus](https://quarkus.io))
+* Web frontend [Vue.js](https://vuejs.org) (Web frontend with JavaScript)
+* (optional a Database) [Cloudant](https://www.ibm.com/cloud/cloudant)
 
 Using the [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy) for the  multi tenancy of the java microservices.
 Here we focus only on the simple implementation for the `web-api` microservice.
