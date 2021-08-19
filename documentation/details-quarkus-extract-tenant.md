@@ -1,8 +1,8 @@
-# Extract tenant and reconfigure OIDC configuration
+# Extract tenant and reconfigure OIDC configuration with Quarkus for Keycloak
 
 This implementation detail is structed in objective, basic use case definition, architecture, multi tenancy realization, technologies and implementation.¶
 
-###  Objective¶
+### Objective¶
 
 I wanted to get started to implement an very simple microservices based application example for multi tenancy. With a basic use case defined for this example application.
 
