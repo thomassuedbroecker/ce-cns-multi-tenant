@@ -53,12 +53,11 @@ The example application currently uses following technologies.
 
 * Multi Tenancy
  
-    * [ Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy)
-    
+    * [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy)
+
 * Microservies
 
     * [Quarkus](https://quarkus.io)
-    * 
     * Java
 
 * Web frontend:
@@ -67,7 +66,10 @@ The example application currently uses following technologies.
     * JavaScript
 
 
-Simply implementation for the web-api service.
+Using the [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy) for the  multi tenancy of the java microservices.
+Here we focus only on the simple implementation for the `web-api` microservice.
+
+These are the steps:
 
 1. Provide a REST endpoint for each tenant
 2. Extract inside the invoked endpoint the JWT access-token and set the right configuration for the given tenant, that means in this case the Keycloak realm.
