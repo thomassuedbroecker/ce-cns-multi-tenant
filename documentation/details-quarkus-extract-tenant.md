@@ -1,5 +1,7 @@
 # Extract tenant and reconfigure OIDC configuration
 
+This implementation detail is structed in objective, basic use case definition, architecture, multi tenancy realization, technologies and implementation.¶
+
 ###  Objective¶
 
 I wanted to get started to implement an very simple microservices based application example for multi tenancy. With a basic use case defined for this example application.
@@ -39,7 +41,7 @@ The gif shows a basic overview of the dependencies in following sequence:
 
 4. The `articles` microservice does the same validation as `web-api` using [Quarkus](https://quarkus.io/guides/security-openid-connect-multitenancy) and uses the right query to provide the needed articles data from the Cloudant database.
 
-### Multi Tenancy realization
+### Multi tenancy realization
 
 * Varibale frontends for each domain
 * Microservice using [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy)
@@ -55,6 +57,8 @@ The example application currently uses following technologies.
 * Microservies ([Quarkus](https://quarkus.io))
 * Web frontend [Vue.js](https://vuejs.org) (Web frontend with JavaScript)
 * (optional a Database) [Cloudant](https://www.ibm.com/cloud/cloudant)
+
+### Implementation
 
 Using the [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy) for the  multi tenancy of the java microservices.
 Here we focus only on the simple implementation for the `web-api` microservice.
