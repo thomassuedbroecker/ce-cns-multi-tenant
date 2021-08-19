@@ -135,13 +135,13 @@ bash local-start-tenant.sh
 
 This bash script will start seven terminals:
  
-    * Keycloak (port 8282)
-    * Web-App select (port 8080)
-    * Web-App tenant A (port 8081)
-    * Web-App tenant B (port 8082)
-    * Web-API microservice (port 8083)
-    * Articles microservice (port 8084)
-    * Auto configuration of Keycloak (**waits 1 min befor it starts**)
+* Keycloak (port 8282)
+* Web-App select (port 8080)
+* Web-App tenant A (port 8081)
+* Web-App tenant B (port 8082)
+* Web-API microservice (port 8083)
+* Articles microservice (port 8084)
+* Auto configuration of Keycloak (**waits 1 min befor it starts**)
 
 The image below shows the terminal sessions:
 
