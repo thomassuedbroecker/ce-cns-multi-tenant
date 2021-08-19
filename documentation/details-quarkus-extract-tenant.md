@@ -1,20 +1,16 @@
 # Extract tenant and reconfigure OIDC configuration with Quarkus for Keycloak
 
-This implementation detail is structed in objective, basic use case definition, architecture, multi tenancy realization, technologies and implementation.¶
+This implementation detail is structured in objective, use case definition, architecture, multi tenancy realization, technologies and implementation.¶
 
 ### Objective¶
 
-I wanted to get started to implement an very simple microservices based application example for multi tenancy. With a basic use case defined for this example application.
+I want to start with a very simple microservices based application example for multi tenancy implementation, and for this application is a simple use case defined.
 
-The starting point from the technical and usage perspective is this workshop [`Get started to deploy a Java Microservices application to Code Engine`](https://suedbroecker.net/2021/05/28/new-hands-on-workshop-get-started-to-deploy-a-java-microservices-application-to-code-engine/).
+The starting point, from the technical and usage perspective, is this workshop [`Get started to deploy a Java Microservices application to Code Engine`](https://suedbroecker.net/2021/05/28/new-hands-on-workshop-get-started-to-deploy-a-java-microservices-application-to-code-engine/).
 
-### Basic Use Case
+### Use Case
 
-This is the simple basic use case defined in the first step for the example application.
-
-#### Short Description 
-
-Get articles displayed based on your email domain, user role and user authentication and authorization.
+Show articles based on a email domain, availdated by role and user authentication and authorization.
 
 #### Basic Flow
 
@@ -23,7 +19,7 @@ Get articles displayed based on your email domain, user role and user authentica
 3. Login to the right realm on the Identity and Access Management system
 4. The articles are displayed according to the user role and tenant.
 
-* Example basic flow implementation (local machine)
+The following gif shows an axample implementation overview of this use case on the local machine.
 
 ![](images/very-basic-mulit-tenant.gif)
 
@@ -31,14 +27,11 @@ Get articles displayed based on your email domain, user role and user authentica
 
 ![](images/very-basic-mulit-tenant-diagram.gif)
 
-The gif shows a basic overview of the dependencies in following sequence:
+The gif shows a simplified overview of the dependencies of the architecture in following sequence:
 
 1. Invoke `web-app-select` on `port 8080` and insert your email to select the domain for the tenant ((blog.de == tenantA) and (blog.com == tenantA))
-
-2. The related webfronted for `blog.de` is invoked, it's `web-app-tenant-a` (`port 8081`) that redirects to the right Keycloak realm (tenant-A) which provides the login and returns the access-token. We use that token to access the `web-api` microservice (`port 8083`). Therefor we invoke the `web-api` REST endpoint related to the right tenant (realm), in this case it's tenant-a. (`user:alice;role:user` in both realms)
-
+2. The related webfrontend for `blog.de` is invoked, it's `web-app-tenant-a` (`port 8081`) that redirects to the right Keycloak realm (tenant-A) which provides the login and returns the access-token. We use that token to access the `web-api` microservice (`port 8083`). Therefor we invoke the `web-api` REST endpoint related to the right tenant (realm), in this case it's tenant-a. (`user:alice;role:user` in both realms)
 3. The microservice `web-api` uses the the functionalities for multitenancy [provided by Quarkus](https://quarkus.io/guides/security-openid-connect-multitenancy) for the **validation of the access token** at right Keycloak realm and **forwards the given access-token** to the microservice articles, by using the right REST endpoint for the given tenant.
-
 4. The `articles` microservice does the same validation as `web-api` using [Quarkus](https://quarkus.io/guides/security-openid-connect-multitenancy) and uses the right query to provide the needed articles data from the Cloudant database.
 
 ### Multi tenancy realization
@@ -78,7 +71,7 @@ These are the steps:
 
 Relevant code in [ArticleResource.java](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-api-tenant/src/main/java/com/ibm/webapi/ArticleResource.java) of the web-api service.
 
-In this case two endpoints:
+In this case these are the two endpoints:
 
 * `@Path("/articlesA")`
 * `@Path("/articlesB")`
