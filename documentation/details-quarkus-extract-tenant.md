@@ -74,7 +74,7 @@ These are the steps:
 ![](images/very-basic-extract-tenant-quarkus.png)
 
 
-### Provide  REST endpoint for each tenant
+#### Provide  REST endpoint for each tenant
 
 Relevant code in [ArticleResource.java](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-api-tenant/src/main/java/com/ibm/webapi/ArticleResource.java) of the web-api service.
 
@@ -119,7 +119,7 @@ In this case two endpoints:
     }
 ```
 
-###  Extract JWT access-token and set the right configuration
+####  Extract JWT access-token and set the right configuration
 
 Extract inside the invoked endpoint the JWT access-token and set the right configuration for the given tenant, that means in this case the Keycloak realm.
 
@@ -199,10 +199,10 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 }
 ```
 
-### Based on the known tenant invoke the right endpoint of the articles service
+#### Based on the known tenant invoke the right endpoint of the articles service
 
 
-#### Create REST client for each tenant
+##### Create REST client for each tenant
 
 Relevant code in [ArticlesDataAccess.java](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-api-tenant/src/main/java/com/ibm/webapi/ArticlesDataAccess.java) of the web-api service.
 
@@ -224,7 +224,7 @@ URI apiV1 = null;
                 .build(ArticlesService.class);     
 ```
 
-#### Invoke the right client
+##### Invoke the right client
 
 Relevant code in [ArticlesDataAccess.java](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-api-tenant/src/main/java/com/ibm/webapi/ArticlesDataAccess.java) of the web-api service.
 
