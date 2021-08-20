@@ -8,7 +8,7 @@ I want to start with a very simple microservices based application example for m
 
 The starting point, from the technical and usage perspective, is this workshop [`Get started to deploy a Java Microservices application to Code Engine`](https://suedbroecker.net/2021/05/28/new-hands-on-workshop-get-started-to-deploy-a-java-microservices-application-to-code-engine/).
 
-### Use Case
+### Use Case definition
 
 Show articles based on an email domain, validated by role and user authentication and authorization.
 
@@ -60,7 +60,7 @@ The [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/se
 These are the steps:
 
 1. Provide a REST endpoint for each tenant
-2. Extract inside the invoked endpoint the JWT access-token and set the right configuration for the given tenant, that means in this case the Keycloak realm.
+2. Extract the invoked endpoint from the `rootcontext` and set the right configuration in the `CustomTenantConfigResolver` class for the given tenant, that means in this case for the `Keycloak realm`.
 3. Based on the known tenant invoke the right endpoint of the `articles service`.
     1. Create REST client for each tenant
     2. Invoke the right client
@@ -113,14 +113,11 @@ In this case these are the two endpoints:
     }
 ```
 
-####  Extract JWT access-token and set the right configuration
+####  Extract the invoked endpoint and set the right configuration in the CustomTenantConfigResolver¶
 
-Extract inside the invoked endpoint the JWT access-token and set the right configuration for the given tenant, that means in this case the Keycloak realm.
+Extract the invoked endpoint from the `rootcontext` and set the right configuration in the `CustomTenantConfigResolver` class for the given tenant, that means in this case for the `Keycloak realm`.
 
-Relevant code in [CustomTenantConfigResolver.java](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-api-tenant/src/main/java/com/ibm/webapi/CustomTenantConfigResolver.java) of the web-api service.
-
-* `"articlesA".equals(parts[1])`
-* `"articlesB".equals(parts[1])`
+Relevant code in [CustomTenantConfigResolver.java](https://github.com/thomassuedbroecker/ce-cns-multi-tenant/blob/master/code/web-api-tenant/src/main/java/com/ibm/webapi/CustomTenantConfigResolver.java) of the `web-api microservice`.
 
 ```java
 package com.ibm.webapi;
@@ -138,7 +135,10 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
    
     @Override
     public OidcTenantConfig resolve(RoutingContext context) {
-        System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve : " + context.request().path());
+        System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve : " + 
+        
+        // 1. Extract path
+        context.request().path());
         String path = context.request().path();
         String[] parts = path.split("/");
 
@@ -146,12 +146,14 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
             // resolve to default tenant configuration
             return null;
         }
-
+        
+        // 2. Verify path with given tenant options
         if ("articlesA".equals(parts[1])) {
             OidcTenantConfig config = new OidcTenantConfig();
 
             System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + config.getToken().getIssuer().toString());
-
+            
+            // 3. Set the right configuration for the Keycloak realm
             config.setTenantId("tenantA");
             config.setAuthServerUrl("http://localhost:8282/auth/realms/tenantA");
             config.setClientId("backend-service");
@@ -160,9 +162,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
             config.setCredentials(credentials);
 
             System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + config.toString());
-
-
-            // any other setting support by the quarkus-oidc extension
 
             return config;
         }
@@ -181,8 +180,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
             config.setCredentials(credentials);
 
             System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve B: " + config.toString());
-
-            // any other setting support by the quarkus-oidc extension
 
             return config;
         }
