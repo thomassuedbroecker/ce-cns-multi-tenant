@@ -26,11 +26,12 @@ Get articles displayed based on your email domain, user role and user authentica
 #### Basic Flow
 
 1. Insert email address
-2. Based on the domain of your email address you are routed to the right tenant ( example `blog.de` and `blog.com`)
-3. Login to the right realm on the Identity and Access Management system
+2. Based on the domain of your email address you are routed to the right tenant (examples `blog.de` and `blog.com`)
+3. Login to the right realm on the identity and access management system
 4. The articles are displayed according to the user role and tenant.
 
-* Example basic flow implementation (local machine)
+
+Here an example basic flow implementation at the local machine.
 
 ![](images/very-basic-mulit-tenant.gif)
 
@@ -60,14 +61,14 @@ The gif shows a basic overview of following sequence:
 
     2. Two microservices
 
-        * web-api (react based on given tenant )
-        * articles (react based on given tenant )
+        * web-api (react based on given tenant)
+        * articles (react based on given tenant)
 
     3. One Identity and Access Management system
 
         * Keycloak with two custom realms
 
-    4. One database service on IBM Cloud
+    4. (optional) One database service on IBM Cloud
 
         * Cloudant with one Database       
 
@@ -85,16 +86,16 @@ The example application currently uses following technologies.
 
 * Multi Tenancy
  
-    * [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy)
+    * [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy) for the Java microservices implementation
 
 * Microservies
 
     * [Quarkus](https://quarkus.io)
     * Java
 
-* Web frontend:
+* Web frontends:
 
-    * [Vue.js](https://vuejs.org) (Web frontend)
+    * [Vue.js](https://vuejs.org)
     * JavaScript
 
 * Example setup automation
@@ -116,7 +117,7 @@ The example application currently uses following technologies.
     * You need to you have installed on you MacOS:
 
         * Java: openjdk version "11.0.11"
-        * Docker: "3.4"
+        * Docker Desktop: "3.4"
         * Apache Maven: "3.8.1"
         * Vue.js: vue/cli "4.5.13"
 
@@ -145,7 +146,7 @@ This bash script will start seven terminals:
 * Web-App tenant B (port 8082)
 * Web-API microservice (port 8083)
 * Articles microservice (port 8084)
-* Auto configuration of Keycloak (**waits 1 min befor it starts**)
+* Auto configuration of Keycloak (**waits 1 min before the configuration starts**)
 
 The image below shows the terminal sessions:
 

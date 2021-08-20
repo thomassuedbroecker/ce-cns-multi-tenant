@@ -1,6 +1,6 @@
 # Extract tenant and reconfigure OIDC configuration with Quarkus for Keycloak
 
-This implementation detail is structured in objective, use case definition, architecture, multi tenancy realization, technologies and implementation.¶
+This implementation detail is structured in objective, use case definition, architecture, multi tenancy realization, technologies, and implementation.¶
 
 ### Objective¶
 
@@ -10,16 +10,16 @@ The starting point, from the technical and usage perspective, is this workshop [
 
 ### Use Case
 
-Show articles based on a email domain, availdated by role and user authentication and authorization.
+Show articles based on an email domain, validated by role and user authentication and authorization.
 
 #### Basic Flow
 
 1. Insert email address
-2. Based on the domain of your email address you are routed to the right tenant ( example `blog.de` and `blog.com`)
+2. Based on the domain of your email address you are routed to the right tenant (example `blog.de` and `blog.com`)
 3. Login to the right realm on the Identity and Access Management system
 4. The articles are displayed according to the user role and tenant.
 
-The following gif shows an axample implementation overview of this use case on the local machine.
+The following gif shows an example implementation overview of this use case on the local machine.
 
 ![](images/very-basic-mulit-tenant.gif)
 
@@ -36,10 +36,12 @@ The gif shows a simplified overview of the dependencies of the architecture in f
 
 ### Multi tenancy realization
 
-* Varibale frontends for each domain
+In the given use case following `multi tenancy realization` will be used.
+
+* Variable frontends for each domain
 * Microservice using [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy)
-* Database will have an editional entry to seperate the domains
-* Identity and access management will be manage be different Keycloak realms
+* Database will have an additional entry to separate the domains
+* Identity and access management will be managed by different Keycloak realms
 
 ### Technologies
 
@@ -47,14 +49,13 @@ The example application currently uses following technologies.
 
 * Identity and Access Management ([Keycloak](https://www.keycloak.org))
 * Multi Tenancy ([Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy))
-* Microservies ([Quarkus](https://quarkus.io))
+* Microservices  ([Quarkus](https://quarkus.io))
 * Web frontend [Vue.js](https://vuejs.org) (Web frontend with JavaScript)
-* (optional a Database) [Cloudant](https://www.ibm.com/cloud/cloudant)
+* (Optional a Database) [Cloudant](https://www.ibm.com/cloud/cloudant)
 
 ### Implementation
 
-Using the [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy) for the  multi tenancy of the java microservices.
-Here we focus only on the simple implementation for the `web-api` microservice.
+The [Quarkus Security OpenID Connect Multi Tenancy](https://quarkus.io/guides/security-openid-connect-multitenancy) for the  multi tenancy of the java microservices is used for the implementation. Here we focus only on the example implementation for the `web-api` microservice.
 
 These are the steps:
 
