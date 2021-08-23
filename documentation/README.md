@@ -12,7 +12,7 @@ The plan will be changed, if needed.
 
 | Task | State | Comments|
 | --- | --- | --- |
-|Get it working on the local machine | **done** | simplified for the basic Use Case  |
+|Get it working on the local machine | **done** | simplified for the basic Use Case with App ID |
 | Deploy it to Code Engine | **open** |   |
 | Redefine the use case and technology | **open** |   |
 | Plan to implement with redefined use case and technology | **open** |   |
@@ -79,7 +79,7 @@ The example application currently uses following technologies.
 
 * Identity and Access Management
 
-    * [Keycloak](https://www.keycloak.org)
+    * [App ID](https://cloud.ibm.com/docs/appid?topic=appid-getting-started&interface=ui)
 
 * Database
 
