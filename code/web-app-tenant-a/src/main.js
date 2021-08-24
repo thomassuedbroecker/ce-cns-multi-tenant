@@ -3,7 +3,8 @@ import App from './App.vue'
 import store from './store'
 import router from './router';
 import BootstrapVue from 'bootstrap-vue';
-import Keycloak from 'keycloak-js';
+//import Keycloak from 'keycloak-js';
+import AppID from 'ibmcloud-appid-js';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -13,125 +14,73 @@ Vue.config.devtools = true
 Vue.use(BootstrapVue);
 
 let currentHostname = window.location.hostname; 
-let urls;
+let appid_init;
+let user_info;
 
-// console.log("'-->log: Hostname " + currentHostname );
-// console.log("'-->log: VUE_APP_KEYCLOAK " + window.VUE_APP_KEYCLOAK);
-// console.log("'-->log: VUE_APP_ROOT " + window.VUE_APP_ROOT);
+/**********************************/
+/* Authentication init
+/**********************************/
 
 if (currentHostname.indexOf('localhost') > -1) {
   console.log("--> log: option 1");
-  urls = {
-    api: 'http://localhost:8083',
-    login: 'http://localhost:8282/auth',
+  appid_init = {
+    appid_clientId: 'b3adeb3b-36fc-40cb-9bc3-dd6f15047195',
+    appid_discoveryEndpoint: 'https://us-south.appid.cloud.ibm.com/oauth/v4/a7ec8ce4-3602-42c7-8e88-6f8a9db31935/.well-known/openid-configuration',
     cns: 'http://localhost:8080'
   }
-  store.commit("setAPIAndLogin", urls);
+  store.commit("setAPIAndLogin", appid_init);
+  console.log("--> log: appid_init", appid_init);
 }
-else {
-  console.log("--> log: option 2");
-  let keycloakUrl = window.VUE_APP_KEYCLOAK;
-  let webapiUrl = window.VUE_APP_WEBAPI;
-  let cnsRedirectUrl = 'https://' + currentHostname + window.VUE_APP_ROOT; // logout
-  urls = {
-    api: webapiUrl,
-    login: keycloakUrl,
-    cns: cnsRedirectUrl 
-  }
-  console.log("--> log: urls ", urls);
-  store.commit("setAPIAndLogin", urls);
-}
-
-console.log("--> log: webapiUrl : " +  urls.webapiUrl);
-console.log("--> log: keycloakUrl : " + urls.keycloakUrl);
 
 let initOptions = {
-  url: store.state.endpoints.login , realm: window.VUE_REALM, clientId: 'frontend', onLoad: 'login-required'
+  clientId: store.state.appid_init.appid_clientId , discoveryEndpoint: store.state.appid_init.appid_discoveryEndpoint
 }
 
-let keycloak = Keycloak(initOptions);
+/**********************************/
+/* Functions 
+/**********************************/
 
-keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
-  if (!auth) {
-    window.location.reload();
-  }
+async function asyncAppIDInit(appID) {
+
+  var appID_init_Result = await appID.init(initOptions);
+  console.log("--> log: appID_init_Result ", appID_init_Result);
   
-  // Vue application instance
-  new Vue({
-    store,
-    router,
-    render: h => h(App)
-  }).$mount('#app')
-
-  let payload = {
-    idToken: keycloak.idToken,
-    accessToken: keycloak.token
-  }
-
-  if ((keycloak.token && keycloak.idToken) != '' && (keycloak.idToken != '')) {
-    store.commit("login", payload);
-    console.log("--> log: User has logged in: " + keycloak.subject);
-    console.log("--> log: TokenParsed: "+ JSON.stringify(keycloak.tokenParsed));
-    console.log("--> log: User name: " + keycloak.tokenParsed.preferred_username);
-    console.log("--> log: accessToken: " + payload.accessToken);
-    console.log("--> log: idToken: " + payload.idToken);
-    payload = {
-      name: keycloak.tokenParsed.preferred_username
-    };
-    store.commit("setName", payload);
-  }
-  else {
-    payloadRefreshedTokens = {
-      idToken: "",
-      accessToken: ""
+  try {
+    /******************************/
+    /* Authentication
+    /******************************/
+    let tokens = await appID.signin();
+    console.log("--> log: tokens ", tokens);   
+    user_info = {
+      isAuthenticated: true,
+      idToken : tokens.idToken,
+      accessToken: tokens.accessToken,
+      name : tokens.idTokenPayload.name
     }
-    store.commit("login", payloadRefreshedTokens);
-    store.commit("logout");
-  }
+    store.commit("login", user_info);
+    return true;
+  } catch (e) {
+    console.log("--> log: error ", e);
+    return false;
+  } 
+};
 
- setInterval(() => {
-    console.log("--> log: interval ");
-    console.log("--> log: isAuthenticated ", store.state.user.isAuthenticated);
-    keycloak.updateToken().then((refreshed) => {
-      console.log("--> log: isAuthenticated ", store.state.user.isAuthenticated);
-      if (store.state.user.isAuthenticated != false ) {
-        if (refreshed) {
-          console.log("--> log: refreshed ");         
-          let payloadRefreshedTokens = {
-            idToken: keycloak.idToken,
-            accessToken: keycloak.token
-          }
+/**********************************/
+/* Create vue appication instance
+/**********************************/
+let appID = new AppID();
+let init_messsage = "";
+if (!(init_messsage=asyncAppIDInit(appID))) {
+  console.log("--> log: init_messsage : " + init_messsage);
+  window.location.reload();
+} else {
+    console.log("--> log: init_messsage : " + init_messsage);
+    // Vue application instance
+    new Vue({
+      store,
+      router,
+      render: h => h(App)
+    }).$mount('#app');
+}
 
-          if ((keycloak.token && keycloak.idToken != '') && (keycloak.idToken != '')) {
-            store.commit("login", payloadRefreshedTokens);
-          }
-          else {
-            console.log("--> log: token refresh problems");  
-            payloadRefreshedTokens = {
-              idToken: "",
-              accessToken: ""
-            }
-            store.commit("login", payloadRefreshedTokens);
-            store.commit("logout");
-          }
-        }
-      } else {
-        console.log("--> log: logout isAuthenticated  =", store.state.user.isAuthenticated);
-        
-        var logoutOptions = { redirectUri : urls.cns };
-        console.log("--> log: logoutOptions  ", logoutOptions  );
-            
-        keycloak.logout(logoutOptions).then((success) => {
-              console.log("--> log: logout success ", success );
-        }).catch((error) => {
-              console.log("--> log: logout error ", error );
-        });
-        store.commit("logout");
-      }
-    }).catch(() => {
-      console.log("--> log: catch interval");
-    });
-  }, 10000)
-}).catch(() => {
-  console.log("-->log: Failed to authenticate");
-});
+

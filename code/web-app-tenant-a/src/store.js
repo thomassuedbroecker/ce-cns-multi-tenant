@@ -6,9 +6,11 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     endpoints: {
-      api: " ", // is set automatically in main.js
-      login: " ", // is set automatically in main.js
-      cns: " " // is set automatically in main.js
+      api : " "   
+    },
+    appid_init: {
+      appid_clientId: " ",
+      appid_discoveryEndpoint: " "
     },
     user: {
       isAuthenticated: false,
@@ -22,8 +24,8 @@ export default new Vuex.Store({
       state.endpoints.api = payload.api;      
     },
     setAPIAndLogin(state, payload) {
-      state.endpoints.api = payload.api;
-      state.endpoints.login = payload.login;
+      state.appid_init.appid_clientId = payload.appid_clientId;
+      state.appid_init.appid_discoveryEndpoint = payload.appid_discoveryEndpoint;
     },
     logout(state) {
       state.user.isAuthenticated = false;
@@ -35,6 +37,7 @@ export default new Vuex.Store({
       state.user.isAuthenticated = true;
       state.user.idToken = payload.idToken;
       state.user.accessToken = payload.accessToken;
+      state.user.name = payload.name;
     },
     setName(state, payload) {
       state.user.name = payload.name;

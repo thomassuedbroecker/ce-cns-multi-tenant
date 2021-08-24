@@ -7,8 +7,10 @@
     "build": "vue-cli-service build --dest dist"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "axios": "0.21.1",
     "bootstrap-vue": "2.0.0-rc.13",
+    "ibmcloud-appid-js": "npm:ibmcloud-appid-js",
     "keycloak-js": "10.0.2",
     "vue": "2.6.6",
     "vue-cookies": "^1.7.4",
