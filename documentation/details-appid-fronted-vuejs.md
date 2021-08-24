@@ -48,12 +48,13 @@ asyncAppIDInit(appID);
 
 * [Keycloak REST API](https://www.keycloak.org/docs-api/10.0/rest-api/index.html)
 * [App ID API documentation](https://cloud.ibm.com/apidocs/app-id/auth)
+* [App ID Management API](https://us-south.appid.cloud.ibm.com/swagger-ui/#/Management%20API%20-%20Cloud%20Directory%20Users)
 
 | Functionality | Keycloak | App ID |
 |---|---|---|
-| Configuration of User and Role using the API calls | Possible with the Admin API | Not possible for "Cloud Directory" |
+| Configuration of User and Role using the API calls | Possible with the Admin API | Possible with the Admin API also for "Cloud Directory" |
 | Configurations different roles in differnt tenants | Possible using different realms or different groups  | You need different App ID instances |
-| Configartions different roles in differnt tenants | Possible using different realms or different groups  | You need different App ID instances |
+| Definition of clients | Feed to define own application client types  | Predefined client types, which does impact the start of the authenication dialog. |
 
 ---
 ### Extract URL information
