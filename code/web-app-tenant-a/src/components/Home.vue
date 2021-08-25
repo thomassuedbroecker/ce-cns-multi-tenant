@@ -58,6 +58,7 @@ export default {
     }
   },
   data() {
+    console.log("--> Log: webApiUrl" + this.$store.state.endpoints.api + "/articlesA");
     return {
       webApiUrl: this.$store.state.endpoints.api + "/articlesA",
       articles: [],
@@ -86,7 +87,7 @@ export default {
           that.error = "";
         })
         .catch(function(error) {
-          console.log("--> log: " + error);
+          console.log("--> log: readArticles error: " + error);
           that.loading = false;
           that.error = error;
         });

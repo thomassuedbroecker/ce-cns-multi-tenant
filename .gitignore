@@ -6,3 +6,7 @@ yarn-error.log
 yarn.lock
 update-cns-realm.json
 tmp-cns-realm.json
+
+# AppID related
+application.properties
+env-config.js

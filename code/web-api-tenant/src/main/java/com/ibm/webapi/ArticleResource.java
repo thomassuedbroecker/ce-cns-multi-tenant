@@ -38,7 +38,6 @@ public class ArticleResource {
     @GET
     @Path("/articlesA")
     @Produces(MediaType.APPLICATION_JSON)
-    //@Authenticated
     @RolesAllowed("user")
     @NoCache
     public List<Article> getArticlesA() {
@@ -56,7 +55,7 @@ public class ArticleResource {
     @Path("/articlesB")
     @Produces(MediaType.APPLICATION_JSON)
     //@Authenticated
-    @RolesAllowed("user")
+    //@RolesAllowed("user")
     @NoCache
     public List<Article> getArticlesB() {
         try {

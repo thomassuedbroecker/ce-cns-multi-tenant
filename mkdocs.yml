@@ -11,6 +11,8 @@ docs_dir: documentation
 
 # Navigation
 nav:
+  - App ID discovery frontend : details-appid-fronted-vuejs.md
+  - Compare App ID and Keycloak : compare-appid-keycloak.md
   - Introduction:
     - Overview: ./README.md
   - Implementation details:

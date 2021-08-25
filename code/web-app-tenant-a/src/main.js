@@ -3,7 +3,6 @@ import App from './App.vue'
 import store from './store'
 import router from './router';
 import BootstrapVue from 'bootstrap-vue';
-//import Keycloak from 'keycloak-js';
 import AppID from 'ibmcloud-appid-js';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -16,6 +15,7 @@ Vue.use(BootstrapVue);
 let currentHostname = window.location.hostname; 
 let appid_init;
 let user_info;
+let urls;
 
 /**********************************/
 /* Authentication init
@@ -24,12 +24,20 @@ let user_info;
 if (currentHostname.indexOf('localhost') > -1) {
   console.log("--> log: option 1");
   appid_init = {
-    appid_clientId: 'b3adeb3b-36fc-40cb-9bc3-dd6f15047195',
-    appid_discoveryEndpoint: 'https://us-south.appid.cloud.ibm.com/oauth/v4/a7ec8ce4-3602-42c7-8e88-6f8a9db31935/.well-known/openid-configuration',
+    
+    //web-app-tenant-a-single
+    appid_clientId: VUE_APPID_CLIENT_ID,
+    appid_discoveryEndpoint: window.VUE_APPID_DISCOVERYENDPOINT,  
     cns: 'http://localhost:8080'
   }
   store.commit("setAPIAndLogin", appid_init);
   console.log("--> log: appid_init", appid_init);
+
+  urls = {
+    api: 'http://localhost:8083',
+  }
+  store.commit("setAPI", urls);
+  console.log("--> log: urls", urls);
 }
 
 let initOptions = {

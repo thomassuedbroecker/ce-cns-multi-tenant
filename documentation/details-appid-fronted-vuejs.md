@@ -14,48 +14,101 @@
 ```sh
 yarn add - npm:ibmcloud-appid-js
 ```
+---
 
-Relevant code in the main.js file.
+### Use the App ID client SDK in Vue.js
+
+Relevant code in the main.js file. 
+The code is structured in :
+
+* Authentication init
+* Functions 
+* Authentication
+* Create vue appication instance
 
 ```javascript
+import AppID from 'ibmcloud-appid-js';
+...
+let currentHostname = window.location.hostname; 
+let appid_init;
+let user_info;
+let urls;
+
 /**********************************/
-/* Functions
+/* Authentication init
+/**********************************/
+
+if (currentHostname.indexOf('localhost') > -1) {
+  console.log("--> log: option 1");
+  appid_init = {
+    
+    //web-app-tenant-a-single
+    appid_clientId: 'b3adeb3b-XXX-40cb-9bc3-dd6f15047195',
+    appid_discoveryEndpoint: 'https://us-south.appid.cloud.ibm.com/oauth/v4/a7ec8ce4-3602-42c7-XXX-6f8a9db31935/.well-known/openid-configuration',
+    
+    cns: 'http://localhost:8080'
+  }
+  store.commit("setAPIAndLogin", appid_init);
+  console.log("--> log: appid_init", appid_init);
+
+  urls = {
+    api: 'http://localhost:8083',
+  }
+  store.commit("setAPI", urls);
+  console.log("--> log: urls", urls);
+}
+
+let initOptions = {
+  clientId: store.state.appid_init.appid_clientId , discoveryEndpoint: store.state.appid_init.appid_discoveryEndpoint
+}
+
+/**********************************/
+/* Functions 
 /**********************************/
 
 async function asyncAppIDInit(appID) {
 
-  var appID_init_Result = await appID.init({
-        clientId: 'b3adeb3b-36fc-40cb-9bc3-dd6f15047195',
-        discoveryEndpoint: 'https://us-south.appid.cloud.ibm.com/oauth/v4/a7ec8ce4-3602-42c7-8e88-6f8a9db31935/.well-known/openid-configuration'
-  });
+  var appID_init_Result = await appID.init(initOptions);
   console.log("--> log: appID_init_Result ", appID_init_Result);
   
   try {
-    const tokens = await appID.signin();
-    console.log("--> log: tokens ", tokens);
+    /******************************/
+    /* Authentication
+    /******************************/
+    let tokens = await appID.signin();
+    console.log("--> log: tokens ", tokens);   
+    user_info = {
+      isAuthenticated: true,
+      idToken : tokens.idToken,
+      accessToken: tokens.accessToken,
+      name : tokens.idTokenPayload.name
+    }
+    store.commit("login", user_info);
+    return true;
   } catch (e) {
-    console.log("--> log: tokens ", e);
-    return appID_init_Result;
+    console.log("--> log: error ", e);
+    return false;
   } 
 };
 
+/**********************************/
+/* Create vue appication instance
+/**********************************/
 let appID = new AppID();
-asyncAppIDInit(appID);
+let init_messsage = "";
+if (!(init_messsage=asyncAppIDInit(appID))) {
+  console.log("--> log: init_messsage : " + init_messsage);
+  window.location.reload();
+} else {
+    console.log("--> log: init_messsage : " + init_messsage);
+    // Vue application instance
+    new Vue({
+      store,
+      router,
+      render: h => h(App)
+    }).$mount('#app');
+}
 ```
-
----
-### Compare App ID and Keycloak
-
-* [Keycloak REST API](https://www.keycloak.org/docs-api/10.0/rest-api/index.html)
-* [App ID API documentation](https://cloud.ibm.com/apidocs/app-id/auth)
-* [App ID Management API](https://us-south.appid.cloud.ibm.com/swagger-ui/#/Management%20API%20-%20Cloud%20Directory%20Users)
-
-| Functionality | Keycloak | App ID |
-|---|---|---|
-| Configuration of User and Role using the API calls | Possible with the Admin API | Possible with the Admin API also for "Cloud Directory" |
-| Configurations different roles in differnt tenants | Possible using different realms or different groups  | You need different App ID instances |
-| Definition of clients | Feed to define own application client types  | Predefined client types, which does impact the start of the authenication dialog. |
-
 ---
 ### Extract URL information
 

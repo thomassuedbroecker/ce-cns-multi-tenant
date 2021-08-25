@@ -9,9 +9,9 @@ cns.articles-url_tenant_A=${CNS_ARTICLES_URL_TENANT_A:http://localhost:8084/arti
 cns.articles-url_tenant_B=${CNS_ARTICLES_URL_TENANT_B:http://localhost:8084/articlesB}
 
 # App ID configuration
-appid.auth-server-url_tenant_A=${appid_auth_server_url_tenant_A:https://us-south.appid.cloud.ibm.com/oauth/v4/a7ec8ce4-3602-42c7-8e88-6f8a9db31935}
-appid.client_id_tenant_A=${appid_client_id_tenant_A:e9817f90-e8cb-4302-a396-3978223619f7}
-appid.secret_tenant_A=${appid_secret_tenant_A:ZjljZTZmODgtOTUwMi00NzQ1LWEwMmUtOTYwYzM2OWY4ZjA3}
+appid.auth-server-url_tenant_A=${appid_auth_server_url_tenant_A:https://us-south.appid.cloud.ibm.com/oauth/v4/a7ec8ce4-XXXX-42c7-8e88-6f8a9db31935}
+appid.client_id_tenant_A=${appid_client_id_tenant_A:e9817f90-e8cb-XXXX-a396-3978223619f7}
+appid.secret_tenant_A=${appid_secret_tenant_A:ZjljZTZmODgtOTXXXXQ1LWEwMmUtOTYwYzM2OWY4ZjA3}
 
 # Default Tenant Configuration
 # quarkus.oidc.auth-server-url=http://localhost:8282/auth/realms/tenantA
