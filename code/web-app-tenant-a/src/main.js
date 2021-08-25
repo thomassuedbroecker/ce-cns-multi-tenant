@@ -26,7 +26,7 @@ if (currentHostname.indexOf('localhost') > -1) {
   appid_init = {
     
     //web-app-tenant-a-single
-    appid_clientId: VUE_APPID_CLIENT_ID,
+    appid_clientId: window.VUE_APPID_CLIENT_ID,
     appid_discoveryEndpoint: window.VUE_APPID_DISCOVERYENDPOINT,  
     cns: 'http://localhost:8080'
   }

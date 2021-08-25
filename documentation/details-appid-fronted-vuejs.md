@@ -5,6 +5,10 @@
 
 * [Informtion on stackoverflow](https://stackoverflow.com/questions/4470523/create-a-branch-in-git-from-another-branch)
 
+```sh
+git checkout -b [new branch: feature] [parent branch: example master]
+```
+
 ---
 ### Add App ID client SDK
 

@@ -8,5 +8,5 @@ update-cns-realm.json
 tmp-cns-realm.json
 
 # AppID related
-application.properties
-env-config.js
+./articles-data-tenant/src/main/resources/application.properties
+./web-app-tenant-a/public/env-config.js
