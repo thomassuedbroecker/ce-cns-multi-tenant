@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 // Security
 import org.jboss.resteasy.annotations.cache.NoCache;
-import javax.annotation.security.RolesAllowed;
+//import javax.annotation.security.RolesAllowed;
 
 // Token
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -69,8 +69,7 @@ public class ArticleResourceData {
 
     private void addSampleArticles() {
         System.out.println("-->log: com.ibm.articles.ArticlesResource.addSampleArticles");
-        
-        // 1. Select tenant  =================================================
+
         String tenant =  tenantJSONWebToken();
         System.out.println("-->log: com.ibm.articles.ArticleResourceData.addSampleArticles tenant: " + tenant);
         addArticle("App ID — (Don’t) Open The Doors! (at blog.de - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele");

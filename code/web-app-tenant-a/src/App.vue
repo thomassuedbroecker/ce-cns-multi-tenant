@@ -16,10 +16,6 @@
           <template slot="button-content">{{ getUserName() }}</template>
           <b-dropdown-item v-on:click="onLogoutClicked">Logout</b-dropdown-item>          
         </b-nav-item-dropdown>
-        <b-nav-item-dropdown right v-if="isAuthenticated == true">
-          <template slot="button-content">Load articels</template>
-          <b-dropdown-item v-on:click="onLoadArticlesClicked">Load articels</b-dropdown-item>          
-        </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-navbar>
     <div style="margin-left:20px;margin-right:20px" >
@@ -55,33 +51,6 @@ export default {
     };
   },
   methods: {
-    
-    onLoadArticlesClicked () {
-      let auth = btoa(window.VUE_APPID_CLIENT_ID_BACKEND + ":" + window.VUE_APPID_SECRET_BACKEND);
-      const axiosService = axios.create({
-        timeout: 30000,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Basic"  + auth
-        }
-      });
-      let that = this;
-      let appid_auth_server=window.VUE_APPID_DISCOVERYENDPOINT;
-      console.log("--> log: try backend : " + appid_auth_server);
-      axiosService
-        .post(this.appid_auth_server)
-        .then(function(response) {
-          that.articles = response.data;
-          console.log("--> log: readArticles data : " + that.articles);
-          that.loading = false;
-          that.error = "";
-        })
-        .catch(function(error) {
-          console.log("--> log: readArticles error: " + error);
-          that.loading = false;
-          that.error = error;
-        });
-    },
     onLoginClicked() {
       window.location = this.$store.state.endpoints.login;
     },    

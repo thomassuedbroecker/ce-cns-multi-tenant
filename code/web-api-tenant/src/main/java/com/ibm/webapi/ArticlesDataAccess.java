@@ -57,14 +57,9 @@ public class ArticlesDataAccess {
             
             String tenant = tenantJSONWebToken();
             System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles (tenant): " + tenant );
-
-            if ("tenantA".equals(tenant)){
-                System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles " + tenant);
-                return articlesServiceA.getArticlesFromService(amount);
-            } else {
-              System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles(NO TENANT)");
-              return null;
-            } 
+            System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles tenantA");
+            
+            return articlesServiceA.getArticlesFromService(amount);
         } catch (Exception e) {
             System.err.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles: Cannot connect to articles service");
             System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles URL: " + used_url);
