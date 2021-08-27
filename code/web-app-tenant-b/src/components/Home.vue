@@ -91,29 +91,6 @@ export default {
           that.loading = false;
           that.error = error;
         });
-    },
-    readUser() {
-      const axiosService = axios.create({
-        timeout: 5000,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + this.$store.state.user.accessToken
-        }
-      });
-      /* No longer needed is done in main.js
-      let that = this;
-      axiosService
-        .get(this.$store.state.endpoints.api + "user")
-        .then(function(response) {
-          let payload = {
-            name: response.data.userName
-          };
-          that.$store.commit("setName", payload);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      */
     }
   },
   mounted() {

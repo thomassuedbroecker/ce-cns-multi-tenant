@@ -18,8 +18,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
     private String auth_server_url_tenant_A;
     @ConfigProperty(name = "appid.client_id_tenant_A") 
     private String client_id_tenant_A;
-    @ConfigProperty(name = "appid.secret_tenant_A") 
-    private String secret_tenant_A;
 
     @Override
     public OidcTenantConfig resolve(RoutingContext context) {
@@ -41,37 +39,14 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
             config.setAuthServerUrl(auth_server_url_tenant_A);
             config.setClientId(client_id_tenant_A);
             OidcTenantConfig.Credentials credentials = new OidcTenantConfig.Credentials();
-            credentials.setSecret(secret_tenant_A);
+            //credentials.setSecret(secret_tenant_A);
             config.setCredentials(credentials);
 
             System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + config.toString());
 
-            // any other setting support by the quarkus-oidc extension
-
             return config;
-        }
-
-        if ("articlesB".equals(parts[1])) {
-            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve tenant B: ");           
-            OidcTenantConfig config = new OidcTenantConfig();
- 
-            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve issuer B : " + config.getToken().getIssuer().toString());
-            
-            config.setTenantId("tenantB");
-            config.setAuthServerUrl("http://localhost:8282/auth/realms/tenantB");
-            config.setClientId("backend-service");
-            OidcTenantConfig.Credentials credentials = new OidcTenantConfig.Credentials();
-            credentials.setSecret("secret");
-            config.setCredentials(credentials);
-
-            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve B: " + config.toString());
-
-            // any other setting support by the quarkus-oidc extension
-
-            return config;
-        }
-
-
-        return null;
+        } else {
+            return null;
+        }    
     }
 }

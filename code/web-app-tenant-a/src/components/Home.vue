@@ -68,9 +68,10 @@ export default {
   },
   methods: {
     readArticles() {
+      console.log("--> log webApiUrl: ", this.webApiUrl);
       this.loading = true;
       const axiosService = axios.create({
-        timeout: 30000, // because of Code Engine response can be up to 18,29 sec in Postman
+        timeout: 30000,
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + this.$store.state.user.accessToken
@@ -87,33 +88,10 @@ export default {
           that.error = "";
         })
         .catch(function(error) {
-          console.log("--> log: readArticles error: " + error);
+          console.log("--> log: " + error);
           that.loading = false;
           that.error = error;
         });
-    },
-    readUser() {
-      const axiosService = axios.create({
-        timeout: 5000,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + this.$store.state.user.accessToken
-        }
-      });
-      /* No longer needed is done in main.js
-      let that = this;
-      axiosService
-        .get(this.$store.state.endpoints.api + "user")
-        .then(function(response) {
-          let payload = {
-            name: response.data.userName
-          };
-          that.$store.commit("setName", payload);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      */
     }
   },
   mounted() {
@@ -123,7 +101,6 @@ export default {
       },
       val => {
         if (val) {
-          this.readUser();
           this.readArticles();
         }
       }

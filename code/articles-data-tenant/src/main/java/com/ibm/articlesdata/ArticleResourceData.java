@@ -19,31 +19,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import io.quarkus.oidc.IdToken;
 import io.quarkus.oidc.RefreshToken;
 import javax.inject.Inject;
-
-// Cloudant database
-import java.net.URL;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import java.net.MalformedURLException;
-
-// Cloudant database IBM sdk
-import com.ibm.cloud.sdk.core.security.BasicAuthenticator;
-import com.ibm.cloud.cloudant.v1.Cloudant;
-import com.ibm.cloud.cloudant.v1.model.PostSearchOptions;
-import com.ibm.cloud.cloudant.v1.model.SearchResult;
-import java.util.List;
-import java.util.ArrayList;
-
-// JSON-B
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
-
-// JSON
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonArray;
-import javax.json.JsonReader;
-// Need to the string input
-import java.io.StringReader;  
 
 @Path("/")
 public class ArticleResourceData {
@@ -61,34 +37,13 @@ public class ArticleResourceData {
     // Tenant
     @ConfigProperty(name = "cns.tenant_A")
     private String tenant_A;
-    @ConfigProperty(name = "cns.tenant_B")
-    private String tenant_B;
     
-    // Cloudant
-    @ConfigProperty(name = "cloudant.url")
-    private String url;
-    @ConfigProperty(name = "cloudant.username")
-    private String username;
-    @ConfigProperty(name = "cloudant.password")
-    private String password;
-    @ConfigProperty(name = "cloudant.database")
-    private String database;
-
-    // Articles DB
-    @ConfigProperty(name = "articlesDB.design")
-    private String design;
-    @ConfigProperty(name = "articlesDB.index")
-    private String index;
-    @ConfigProperty(name = "articlesDB.queryA")
-    private String queryA;
-    @ConfigProperty(name = "articlesDB.queryB")
-    private String queryB;
 
     @GET
     @Path("/articlesA")
     @Produces(MediaType.APPLICATION_JSON)
     //@Authenticated
-    @RolesAllowed("user")
+    //@RolesAllowed("user")
     @NoCache
     public Set<Article> getArticlesA() {
         System.out.println("-->log: com.ibm.articles.ArticlesResource.getArticlesA");
@@ -98,24 +53,9 @@ public class ArticleResourceData {
         return articles;
     }
 
-    @GET
-    @Path("/articlesB")
-    @Produces(MediaType.APPLICATION_JSON)
-    //@Authenticated
-    @RolesAllowed("user")
-    @NoCache
-    public Set<Article> getArticlesB() {
-        System.out.println("-->log: com.ibm.articles.ArticlesResource.getArticlesB");
-        Object issuer = this.accessToken.getClaim("iss");
-        System.out.println("-->log: com.ibm.articles.ArticlesResource.getArticles issuer B: " + issuer.toString());
-        System.out.println("-->log: com.ibm.articles.ArticlesResource.getArticles articles B: " + articles.toArray().toString());
-        return articles;
-    }
-
     @PostConstruct
     void addArticles() {
         System.out.println("-->log: com.ibm.articles.ArticleResource.addArticles");
-        //getCloudantData();
         addSampleArticles();
     }
 
@@ -131,73 +71,9 @@ public class ArticleResourceData {
         System.out.println("-->log: com.ibm.articles.ArticlesResource.addSampleArticles");
         
         // 1. Select tenant  =================================================
-        String query="";
         String tenant =  tenantJSONWebToken();
         System.out.println("-->log: com.ibm.articles.ArticleResourceData.addSampleArticles tenant: " + tenant);
-               
-        if ("tenantA".equals(tenant)){
-            addArticle("Blue Cloud Mirror — (Don’t) Open The Doors! (at blog.de - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele");
-        } 
-               
-        if ("tenantB".equals(tenant)){
-            addArticle("Blue Cloud Mirror — (Don’t) Open The Doors! (at blog.com - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele");
-        }
-    }
-
-    private void getCloudantData() {
-        System.out.println("-->log: com.ibm.articles.ArticleResource.getCloudantData");
-        
-        // 1. Connect to IBM Cloudant service =================================
-        BasicAuthenticator authenticator = new BasicAuthenticator(username, password);
-        Cloudant client = new Cloudant(Cloudant.DEFAULT_SERVICE_NAME, authenticator);
-        client.setServiceUrl(url);
-
-        // 2. Select tenant  =================================================
-        String query="";
-        String tenant =  tenantJSONWebToken();
-        System.out.println("-->log: com.ibm.articles.ArticleResourceData.getCloudantData tenant: " + tenant);
-        
-        if ("tenantA".equals(tenant)){
-            query = queryA;
-        } 
-        
-        if ("tenantB".equals(tenant)){
-            query = queryB;
-        }
-
-        // 3. Get articles query in database =================================
-        PostSearchOptions searchOptions = new PostSearchOptions.Builder()
-                                                                .db(database)
-                                                                .ddoc(design)
-                                                                .index(index)
-                                                                .query(query)
-                                                                .build();
-
-        SearchResult search_response = client.postSearch(searchOptions).execute()
-                                                                       .getResult();
-        System.out.println("-->log: com.ibm.articles.ArticleResourceData.getCloudantData search_response: " + search_response);
-        
-        // 4. Extract articles from Cloudant response =========================
-        JsonReader jsonReader = Json.createReader(new StringReader(search_response.toString()));
-        JsonObject object = jsonReader.readObject();
-        jsonReader.close();
-        JsonArray rows = object.getJsonArray("rows");
-        int total_rows = object.getInt("total_rows");
-        
-        if (total_rows > 0 ) {
-            for (int i = 0; i < total_rows; i++) {
-                System.out.println("-->log: com.ibm.articles.ArticleResource.getCloudantData rows: " + rows);
-                JsonObject row_object = rows.getJsonObject(i);
-                System.out.println("-->log: com.ibm.articles.ArticleResource.getCloudantData row_object: " + row_object);
-                JsonObject fields = row_object.getJsonObject("fields");
-                System.out.println("-->log: com.ibm.articles.ArticleResource.getCloudantData fields: " + fields);
-                String url = fields.getString("url");
-                String authorName = fields.getString("authorName");
-                String title = fields.getString("title");
-                System.out.println("-->log: com.ibm.articles.ArticleResource.getCloudantData Author : " + authorName + " Title: " + " url: " + url);
-                addArticle(title, url, title);
-            }
-        }
+        addArticle("App ID — (Don’t) Open The Doors! (at blog.de - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele");
     }
 
     private String tenantJSONWebToken(){
@@ -212,15 +88,7 @@ public class ArticleResourceData {
                 return "empty";
             }
     
-            if ("tenantA".equals(parts[5])) {
-                return "tenantA";
-            }
-
-            if ("tenantB".equals(parts[5])) {
-                return "tenantB";
-            }
-    
-            return "tenant not known";
+            return  parts[5];
 
         } catch ( Exception e ) {
             System.out.println("-->log: com.ibm.articles.ArticlesResourceData.log Exception: " + e.toString());

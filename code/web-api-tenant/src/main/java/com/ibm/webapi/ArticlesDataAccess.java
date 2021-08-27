@@ -29,11 +29,8 @@ public class ArticlesDataAccess {
     
     @ConfigProperty(name = "cns.articles-url_tenant_A") 
     private String articles_url_tenant_A;
-    @ConfigProperty(name = "cns.articles-url_tenant_B") 
-    private String articles_url_tenant_B;
     private String used_url;
     private ArticlesService articlesServiceA;
-    private ArticlesService articlesServiceB;
 
     @PostConstruct
     void initialize() {
@@ -42,7 +39,6 @@ public class ArticlesDataAccess {
         // System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.initialize URL: " + articles_url);
         logJSONWebToken();
 
-
         URI apiV1 = null;
 
         apiV1 = UriBuilder.fromUri(articles_url_tenant_A).build();
@@ -50,14 +46,7 @@ public class ArticlesDataAccess {
         articlesServiceA = RestClientBuilder.newBuilder()
                 .baseUri(apiV1)
                 .register(ExceptionMapperArticles.class)
-                .build(ArticlesService.class);
-                
-        apiV1 = UriBuilder.fromUri(articles_url_tenant_B).build();
-        System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.initialize URI (tenantB) : " + apiV1.toString());
-        articlesServiceB = RestClientBuilder.newBuilder()
-                .baseUri(apiV1)
-                .register(ExceptionMapperArticles.class)
-                .build(ArticlesService.class);     
+                .build(ArticlesService.class);    
     }
 
     public List<CoreArticle> getArticles(int amount) throws NoConnectivity {
@@ -72,11 +61,6 @@ public class ArticlesDataAccess {
             if ("tenantA".equals(tenant)){
                 System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles " + tenant);
                 return articlesServiceA.getArticlesFromService(amount);
-            }
-    
-            if ("tenantB".equals(tenant)){
-                System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles " + tenant);
-                return articlesServiceB.getArticlesFromService(amount);
             } else {
               System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles(NO TENANT)");
               return null;
@@ -111,15 +95,7 @@ public class ArticlesDataAccess {
                 return "empty";
             }
     
-            if ("tenantA".equals(parts[5])) {
-                return "tenantA";
-            }
-
-            if ("tenantB".equals(parts[5])) {
-                return "tenantB";
-            }
-    
-            return "tenant not known";
+            return parts[5];
 
         } catch ( Exception e ) {
             System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.log Exception: " + e.toString());
