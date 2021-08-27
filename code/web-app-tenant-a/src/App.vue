@@ -66,7 +66,7 @@ export default {
         }
       });
       let that = this;
-      let appid_auth_server="https://us-south.appid.cloud.ibm.com/oauth/v4/a7ec8ce4-3602-42c7-8e88-6f8a9db31935/token";
+      let appid_auth_server=window.VUE_APPID_DISCOVERYENDPOINT;
       console.log("--> log: try backend : " + appid_auth_server);
       axiosService
         .post(this.appid_auth_server)

@@ -34,13 +34,15 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
             OidcTenantConfig config = new OidcTenantConfig();
 
             System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + config.getToken().getIssuer().toString());
+            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + auth_server_url_tenant_A);
+            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + client_id_tenant_A);
 
             config.setTenantId("tenantA");
             config.setAuthServerUrl(auth_server_url_tenant_A);
             config.setClientId(client_id_tenant_A);
-            OidcTenantConfig.Credentials credentials = new OidcTenantConfig.Credentials();
+            //OidcTenantConfig.Credentials credentials = new OidcTenantConfig.Credentials();
             //credentials.setSecret(secret_tenant_A);
-            config.setCredentials(credentials);
+            //config.setCredentials(credentials);
 
             System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + config.toString());
 
