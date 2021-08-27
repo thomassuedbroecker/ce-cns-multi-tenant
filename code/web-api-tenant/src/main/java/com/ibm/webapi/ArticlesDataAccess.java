@@ -35,7 +35,7 @@ public class ArticlesDataAccess {
     @PostConstruct
     void initialize() {
 
-        System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.initialize");
+        System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.initialize : " + articles_url_tenant_A );
         // System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.initialize URL: " + articles_url);
         logJSONWebToken();
 
