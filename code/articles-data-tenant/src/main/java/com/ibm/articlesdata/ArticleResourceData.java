@@ -124,8 +124,9 @@ public class ArticleResourceData {
         article.title = title;
         article.url = url;
         article.authorName = author;      
-        if (cleararticles_list){
+        if (cleararticles_list == true){
           articles.clear();
+          System.out.println("-->log: com.ibm.articles.ArticleResourceData.addArticle clear " + cleararticles_list);
         }
         
         articles.add(article);
