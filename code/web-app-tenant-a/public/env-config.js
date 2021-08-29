@@ -4,5 +4,5 @@ window.VUE_APP_ROOT="/" // local
 window.VUE_APP_WEPAPI="http://localhost:8083"
 // App ID related
 // Single WebPage
-window.VUE_APPID_CLIENT_ID='b3adeb3b-36fc-40cb-9bc3-dd6f15047195'
-window.VUE_APPID_DISCOVERYENDPOINT='https://us-south.appid.cloud.ibm.com/oauth/v4/a7ec8ce4-3602-42c7-8e88-6f8a9db31935/.well-known/openid-configuration'
+window.VUE_APPID_CLIENT_ID='100924f6-bcf1-4bc7-a3bc-d00d2aa681ac'
+window.VUE_APPID_DISCOVERYENDPOINT='https://eu-de.appid.cloud.ibm.com/oauth/v4/8f1ddb36-f860-4355-a870-8e0abe7124ef/.well-known/openid-configuration'
