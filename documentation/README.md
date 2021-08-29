@@ -25,11 +25,9 @@ Get articles displayed based on your email domain, user role and user authentica
 
 #### Basic Flow
 
-1. Insert email address
-2. Based on the domain of your email address you are routed to the right tenant (examples `blog.de` and `blog.com`)
-3. Login to the right realm on the identity and access management system
-4. The articles are displayed according to the user role and tenant.
-
+1. Open the web application
+2. Authenticate at App ID.
+3. The articles are displayed according to the user authorization.
 
 Here an example basic flow implementation at the local machine.
 
@@ -43,22 +41,18 @@ Here an example basic flow implementation at the local machine.
 
 The gif shows a basic overview of following sequence:
 
-1. Invoke `web-app-select` on `port 8080` and insert your email to select the domain for the tenant ((blog.de == tenantA) and (blog.com == tenantA))
+2. The `web-app-tenant-a` (`port 8081`) that redirects to the App ID which provides the login and returns the access-token. We use that token to access the `web-api` microservice (`port 8083`). Therefor we invoke the `web-api` REST endpoint.
 
-2. The related webfrontend for `blog.de` is invoked, it's `web-app-tenant-a` (`port 8081`) that redirects to the right Keycloak realm (tenant-A) which provides the login and returns the access-token. We use that token to access the `web-api` microservice (`port 8083`). Therefor we invoke the `web-api` REST endpoint related to the right tenant (realm), in this case it's tenant-a. (`user:alice;role:user` in both realms)
+3. The microservice `web-api` uses the the functionalities for multitenancy [provided by Quarkus `security openID connect multitenancy`](https://quarkus.io/guides/security-openid-connect-multitenancy) to extract the invoked endpoint from the `rootcontext` and set the right configuration for the given App ID tenant. Quarkus also does the **validation of the access token** at App ID and **forwards the given access-token** to the microservice articles.
 
-3. The microservice `web-api` uses the the functionalities for multitenancy [provided by Quarkus `security openID connect multitenancy`](https://quarkus.io/guides/security-openid-connect-multitenancy) to extract the invoked endpoint from the `rootcontext` and set the right configuration for the given tenant, that means in this case for the `Keycloak realm`. Quarkus also does the **validation of the access token** at right Keycloak realm and **forwards the given access-token** to the microservice articles, by using the right REST endpoint for the given tenant.
-
-4. The `articles` microservice does the same validation as `web-api` using [Quarkus](https://quarkus.io/guides/security-openid-connect-multitenancy) and uses the right query to provide the needed articles data from the Cloudant database.
+4. The `articles` microservice does the same validation as `web-api` using [Quarkus](https://quarkus.io/guides/security-openid-connect-multitenancy) and provides data.
 
 
 * In this example we use:
 
     1. Three web applications
 
-         * web-app-select (extract domain)
          * web-app-tenant-a (connect to tenant a)
-         * web-app-tenant-b (connect to tenant b)
 
     2. Two microservices
 
@@ -67,11 +61,8 @@ The gif shows a basic overview of following sequence:
 
     3. One Identity and Access Management system
 
-        * Keycloak with two custom realms
-
-    4. (optional) One database service on IBM Cloud
-
-        * Cloudant with one Database       
+        * App ID
+  
 
 ### Technologies
 
@@ -80,10 +71,6 @@ The example application currently uses following technologies.
 * Identity and Access Management
 
     * [App ID](https://cloud.ibm.com/docs/appid?topic=appid-getting-started&interface=ui)
-
-* Database
-
-    * [Cloudant](https://www.ibm.com/cloud/cloudant)
 
 * Multi Tenancy
  
@@ -131,55 +118,36 @@ You should be able to simply run the example locally.
 ```sh
 git clone https://github.com/thomassuedbroecker/ce-cns-multi-tenant
 cd ce-cns-multi-tenant/CE
+git fetch --all
+git checkout appid-migration-test
 ```
 
 ##### Step 2: Start the example with a bash script
 
 ```sh
-bash local-start-tenant.sh
+bash local-start-appid.sh
 ```
 
 This bash script will start seven terminals:
  
-* Keycloak (port 8282)
-* Web-App select (port 8080)
 * Web-App tenant A (port 8081)
-* Web-App tenant B (port 8082)
 * Web-API microservice (port 8083)
 * Articles microservice (port 8084)
-* Auto configuration of Keycloak (**waits 1 min before the configuration starts**)
 
 The image below shows the terminal sessions:
 
 ![](images/local-example.png)
 
-* two browser sessions
+* one browser sessions
     * Web-App select `http://localhost:8080/` 
-    * Keycloak admin `http://localhost:8282/` (admin/admin)
 
-##### Step 3: Select a tenant by inserting a email address in the `Web-App select` 
-
-  Use following:
-   
-  - `alice@blog.de` for `tenant a`
-  - `alice@blog.com` for `tenant b`
-
-##### Step 4: Login to `tenant a` or `tenant b`
+##### Step 4: Login to App ID
 
   Use following:
 
-  - User: `alice` Password: `alice`
+  - User: `XXX` Password: `XXX`
 
-##### Step 5: Logout from `tenant a` or `tenant b`
 
-Because this will clear the saved cookie in the browser from `Keycloak`.
-
-##### Step 6: Login to `Keycloak` master realm
-
-  Use following:
-
-  - User: `admin` Password: `admin`
-
-Verify the two realm configurations tenant-a and tenant-b.
+Verify you App ID configuration.
 
 

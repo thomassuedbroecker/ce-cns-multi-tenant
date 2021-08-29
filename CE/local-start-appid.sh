@@ -8,6 +8,9 @@ export WEB_APP_TENANT_A="$HOME_PATH/start_vue-tenant_A.sh"
 export WEB_API="$HOME_PATH/start_web-api.sh"
 export ARTICLES="$HOME_PATH/start_articles.sh"
 
+# urls
+export WEB_APP_TENANT_A_URL="http://localhost:8080"
+
 echo "************************************"
 echo "    Configure for execution"
 echo "************************************"
@@ -26,4 +29,4 @@ open -a Terminal $ARTICLES
 echo "************************************"
 echo "    Open Browser"
 echo "************************************"
-open -a "Google Chrome" http://localhost:8080
+open -a "Google Chrome" $WEB_APP_TENANT_A_URL
