@@ -5,6 +5,11 @@
 ########################################
 cat <<EOF
 window.VUE_APP_ROOT="${VUE_APP_ROOT}"
-window.VUE_TENANT_A="${VUE_TENANT_A}"
-window.VUE_TENANT_B="${VUE_TENANT_B}"
+// used as 'environment' variables, 
+window.VUE_APP_ROOT="${}" // local
+window.VUE_APP_WEPAPI="${}"
+// App ID related
+// Single WebPage
+window.VUE_APPID_CLIENT_ID="${}"
+window.VUE_APPID_DISCOVERYENDPOINT="${}"
 EOF

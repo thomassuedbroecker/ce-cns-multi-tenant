@@ -34,7 +34,7 @@ if (currentHostname.indexOf('localhost') > -1) {
   console.log("--> log: appid_init", appid_init);
 
   urls = {
-    api: 'http://localhost:8083',
+    api: window.VUE_APP_WEPAPI,
   }
   store.commit("setAPI", urls);
   console.log("--> log: urls", urls);
