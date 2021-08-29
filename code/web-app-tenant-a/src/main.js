@@ -63,7 +63,7 @@ async function asyncAppIDInit(appID) {
       isAuthenticated: true,
       idToken : tokens.idToken,
       accessToken: tokens.accessToken,
-      name : tokens.idTokenPayload.name
+      name : tokens.idTokenPayload.given_name
     }
     store.commit("login", user_info);
     return true;

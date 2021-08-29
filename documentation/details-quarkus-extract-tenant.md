@@ -14,10 +14,9 @@ Show articles based on an email domain, validated by role and user authenticatio
 
 #### Basic Flow
 
-1. Insert email address
-2. Based on the domain of your email address you are routed to the right tenant (example `blog.de` and `blog.com`)
-3. Login to the right realm on the Identity and Access Management system
-4. The articles are displayed according to the user role and tenant.
+1. Open web applicatoin
+3. Login to the App ID
+4. The articles are displayed to App ID application.
 
 The following gif shows an example implementation overview of this use case on the local machine.
 
@@ -25,7 +24,7 @@ The following gif shows an example implementation overview of this use case on t
 
 ### Architecture
 
-![](images/very-basic-mulit-tenant-diagram.gif)
+![](images/very-basic-appid-diagram.gif)
 
 The gif shows a simplified overview of the dependencies of the architecture in following sequence:
 
