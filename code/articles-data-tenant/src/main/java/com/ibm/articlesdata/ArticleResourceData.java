@@ -201,7 +201,7 @@ public class ArticleResourceData {
                 String authorName = fields.getString("authorName");
                 String title = fields.getString("title");
                 System.out.println("-->log: com.ibm.articles.ArticleResource.getCloudantData Author : " + authorName + " Title: " + " url: " + url);
-                addArticle(title, url, title);
+                addArticle(title, url, title, false);
             }
         }
     }
