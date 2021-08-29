@@ -36,7 +36,6 @@ public class ArticlesDataAccess {
     void initialize() {
 
         System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.initialize : " + articles_url_tenant_A );
-        // System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.initialize URL: " + articles_url);
         logJSONWebToken();
 
         URI apiV1 = null;
