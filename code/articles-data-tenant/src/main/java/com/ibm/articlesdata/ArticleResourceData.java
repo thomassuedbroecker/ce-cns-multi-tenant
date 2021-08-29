@@ -119,28 +119,34 @@ public class ArticleResourceData {
         addSampleArticles();
     }
 
-    private void addArticle(String title, String url, String author) {
+    private void addArticle(String title, String url, String author, boolean cleararticles_list) {
         Article article = new Article();
         article.title = title;
         article.url = url;
-        article.authorName = author;
+        article.authorName = author;      
+        if (cleararticles_list){
+          articles.clear();
+        }
+        
         articles.add(article);
+
     }
 
     private void addSampleArticles() {
         System.out.println("-->log: com.ibm.articles.ArticlesResource.addSampleArticles");
         
         // 1. Select tenant  =================================================
-        String query="";
         String tenant =  tenantJSONWebToken();
         System.out.println("-->log: com.ibm.articles.ArticleResourceData.addSampleArticles tenant: " + tenant);
                
         if ("tenantA".equals(tenant)){
-            addArticle("Blue Cloud Mirror — (Don’t) Open The Doors! (at blog.de - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele");
+            System.out.println("-->log: com.ibm.articles.ArticleResourceData.addSampleArticles tenant related data: " + tenant);
+            addArticle("Blue Cloud Mirror — (Don’t) Open The Doors! (at blog.de - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele", true);
         } 
                
         if ("tenantB".equals(tenant)){
-            addArticle("Blue Cloud Mirror — (Don’t) Open The Doors! (at blog.com - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele");
+            System.out.println("-->log: com.ibm.articles.ArticleResourceData.addSampleArticles tenant related data: " + tenant);
+            addArticle("Blue Cloud Mirror — (Don’t) Open The Doors! (at blog.com - sample data)", "https://haralduebele.github.io/2019/02/17/blue-cloud-mirror-dont-open-the-doors/", "Harald Uebele", true);
         }
     }
 
