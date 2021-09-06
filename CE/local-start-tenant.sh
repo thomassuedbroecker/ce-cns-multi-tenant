@@ -1,7 +1,9 @@
 #!/bin/bash
 # https://scriptingosx.com/2020/03/macos-shell-command-to-create-a-new-terminal-window/
 export HOME_PATH=$(pwd)
+export PODMAN_REGISTRY=quay.io 
 echo "HOME_PATH: " $HOME_PATH
+podman login $PODMAN_REGISTRY
 
 # bash scripts
 export WEB_APP_SELECT="$HOME_PATH/start_vue-select.sh"
