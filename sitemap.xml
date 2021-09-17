@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://thomassuedbroecker.github.io/ce-cns-multi-tenant/</loc>
+         <lastmod>2021-09-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://thomassuedbroecker.github.io/ce-cns-multi-tenant/details-email-domain/</loc>
+         <lastmod>2021-09-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://thomassuedbroecker.github.io/ce-cns-multi-tenant/details-quarkus-extract-tenant/</loc>
+         <lastmod>2021-09-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://thomassuedbroecker.github.io/ce-cns-multi-tenant/lab-tbd/</loc>
+         <lastmod>2021-09-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://thomassuedbroecker.github.io/ce-cns-multi-tenant/optional-lab-tbd/</loc>
+         <lastmod>2021-09-17</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
