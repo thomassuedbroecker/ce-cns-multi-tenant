@@ -13,9 +13,9 @@ The plan will be changed, if needed.
 | Task | State | Comments|
 | --- | --- | --- |
 |Get it working on the local machine | **done** | simplified for the basic Use Case  |
-| Deploy it to Code Engine | **open** |   |
-| Redefine the use case and technology | **open** |   |
-| Plan to implement with redefined use case and technology | **open** |   |
+| Deploy it to Code Engine | **open** | Maybe this will be finished  |
+| Redefine the use case and technology | **canceled** | Moved to a different [github project](https://github.com/nheidloff/multi-tenancy-satellite) |
+| Plan to implement with redefined use case and technology | **canceled** |  Moved to a different project [github project](https://github.com/nheidloff/multi-tenancy-satellite) |
 
 ### Basic Use Case
 
