@@ -26,7 +26,7 @@ Get articles displayed based on your email domain, user role and user authentica
 #### Basic Flow
 
 1. Open the web application
-2. Authenticate at App ID.
+2. Authenticate at AppID
 3. The articles are displayed according to the user authorization.
 
 Here an example basic flow implementation at the local machine.
