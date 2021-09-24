@@ -100,17 +100,9 @@ configureAppIDService(){
     echo ""
     result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
     APPLICATION_CLIENTID=$(echo "$result" | grep "clientId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
-    APPLICATION_CLIENTID=$(echo "$result" | grep "clientId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
-    # Get OAUTHTOKEN for IAM IBM Cloud
-    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
-    #echo "Auth Token: $OAUTHTOKEN"
-    echo ""
-    echo "-------------------------"
-    echo " Create application"
-    echo "-------------------------"
-    echo ""
-    result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
-    echo "Result: $result"
+    APPLICATION_TENANTID=$(echo "$result" | grep "tenantId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
+    APPLICATION_OAUTHSERVERURL=$(echo "$result" | grep "oAuthServerUrl" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
+
 }
 
 exportAppIDInformation(){
