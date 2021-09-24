@@ -19,9 +19,9 @@ echo "************************************"
 echo " articles"
 echo "************************************"
 cd $ROOT_PATH/code/articles-tenant
-docker login quay.io
-docker build -t "quay.io/$REPOSITORY/articles-ce-appid:v1" -f Dockerfile .
-docker push "quay.io/$REPOSITORY/articles-ce-appid:v1"
+podman login quay.io
+podman build -t "quay.io/$REPOSITORY/articles-ce-appid:v1" -f Dockerfile .
+podman push "quay.io/$REPOSITORY/articles-ce-appid:v1"
 
 echo ""
 
@@ -30,6 +30,6 @@ echo " web-api"
 echo "************************************"
 
 cd $ROOT_PATH/code/web-api-tenant
-docker login quay.io
-docker build -t "quay.io/$REPOSITORY/web-api-ce-appid:v1" -f Dockerfile .
-docker push "quay.io/$REPOSITORY/web-api-ce-appid:v1"
+podman login quay.io
+podman build -t "quay.io/$REPOSITORY/web-api-ce-appid:v1" -f Dockerfile .
+podman push "quay.io/$REPOSITORY/web-api-ce-appid:v1"
