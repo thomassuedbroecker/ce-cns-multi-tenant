@@ -100,14 +100,22 @@ configureAppIDService(){
     echo "-------------------------"
     echo ""
     result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
+    echo "-------------------------"
+    echo "Result: $result"
+    echo "-------------------------"
     APPLICATION_CLIENTID=$(echo "$result" | grep "clientId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     APPLICATION_TENANTID=$(echo "$result" | grep "tenantId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     APPLICATION_OAUTHSERVERURL=$(echo "$result" | grep "oAuthServerUrl" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     echo "$APPLICATION_CLIENTID"
     echo "$APPLICATION_TENANTID"
     echo "$APPLICATION_OAUTHSERVERURL"
+    echo "-------------------------"
+    echo " Add scope"
+    echo "-------------------------"
     result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes)
-
+    echo "-------------------------"
+    echo "Result: $result"
+    echo "-------------------------"
 }
 
 exportAppIDInformation(){
