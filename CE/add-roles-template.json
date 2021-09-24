@@ -3,7 +3,7 @@
   "description": "This is an example role.",
   "access": [
     {
-      "application_id": "d2e5a893-e013-42d6-9bd3-45c773bfe802",
+      "application_id": "APPLICATIONID",
       "scopes": [
         "multi_tenant_access"
       ]

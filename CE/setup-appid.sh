@@ -95,12 +95,14 @@ configureAppIDInformation(){
     # Get OAUTHTOKEN for IAM IBM Cloud
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     #echo "Auth Token: $OAUTHTOKEN"
+
+    #****** Add application ******
     echo ""
     echo "-------------------------"
     echo " Create application"
     echo "-------------------------"
     echo ""
-    export result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
+    result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
     echo "-------------------------"
     echo "Result: $result"
     echo "-------------------------"
@@ -113,31 +115,34 @@ configureAppIDInformation(){
     echo "ClientID: $APPLICATION_CLIENTID"
     echo "TenantID: $APPLICATION_TENANTID"
     echo "oAuthServerUrl: $APPLICATION_OAUTHSERVERURL"
-    sleep 10
     echo ""
+
+    #****** Add scope ******
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
-    curl $MANAGEMENTURL/applications -H "Authorization: Bearer $OAUTHTOKEN"
     echo ""
     echo "-------------------------"
     echo " Add scope"
     echo "-------------------------"
+
+    #****** Add role ******
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
-    url=$MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes
-    echo $url
-    curl $url -H "Authorization: Bearer $OAUTHTOKEN"
-    result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $url)
+    result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes)
     echo "-------------------------"
     echo "Result: $result"
     echo "-------------------------"
+    echo ""
     echo "-------------------------"
     echo " Add role"
     echo "-------------------------"
+    #Create file from template
+    sed "s+APPLICATIONID+$APPLICATION_CLIENTID+g" ./add-roles-template.json > ./$ADD_ROLE
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     echo $OAUTHTOKEN
-    result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/roles)
+    result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/roles)
     echo "-------------------------"
     echo "Result: $result"
     echo "-------------------------"
+    echo ""
 }
 
 exportAppIDInformation(){
