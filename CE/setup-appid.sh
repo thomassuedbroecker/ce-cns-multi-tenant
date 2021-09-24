@@ -49,7 +49,7 @@ createAppIDService() {
 
 getUsersAppIDService() {
     # Get OAUTHTOKEN for IAM IBM Cloud
-    export OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     #echo "Auth Token: $OAUTHTOKEN"
     # Invoke get users curl command
     echo ""
@@ -75,16 +75,29 @@ getUsersAppIDService() {
     #curl -i $MANAGEMENTURL/applications -H "Authorization: Bearer $OAUTHTOKEN"
     curl $MANAGEMENTURL/applications -H "Authorization: Bearer $OAUTHTOKEN"
     echo ""
+}
+
+configureAppIDService(){
     # Get OAUTHTOKEN for IAM IBM Cloud
-    export OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     #echo "Auth Token: $OAUTHTOKEN"
     echo ""
     echo "-------------------------"
     echo " Create application"
     echo "-------------------------"
     echo ""
-    #result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
-    #echo "Result: $result"
+    result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
+    echo "Result: $result"
+    # Get OAUTHTOKEN for IAM IBM Cloud
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    #echo "Auth Token: $OAUTHTOKEN"
+    echo ""
+    echo "-------------------------"
+    echo " Create application"
+    echo "-------------------------"
+    echo ""
+    result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
+    echo "Result: $result"
 }
 
 exportAppIDInformation(){
@@ -101,8 +114,6 @@ exportAppIDInformation(){
     echo "$USER_EXPORT" > $USER_EXPORT_FILE
     echo ""
 }
-
-
 
 # **********************************************************************************
 
@@ -123,6 +134,12 @@ echo " Export AppID Information "
 echo "************************************"
 
 exportAppIDInformation
+
+echo "************************************"
+echo " Configure AppID Information "
+echo "************************************"
+
+# configureAppIDInformation
 
 
 
