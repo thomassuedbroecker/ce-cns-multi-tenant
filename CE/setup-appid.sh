@@ -56,7 +56,7 @@ createAppIDService() {
     # Get the tenantId of the AppID service key
     TENANTID=$(ibmcloud resource service-keys --instance-name $YOUR_SERVICE_FOR_APPID --output json | grep "tenantId" | awk '{print $2;}' | sed 's/"//g')
     echo "Tenant ID: $TENANTID"
-    # Get the managementUrl of the AppID service key
+    # Get the managementUrl of the AppID from service key
     MANAGEMENTURL=$(ibmcloud resource service-keys --instance-name $YOUR_SERVICE_FOR_APPID --output json | grep "managementUrl" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     echo "Management URL: $MANAGEMENTURL"
 }
@@ -178,13 +178,13 @@ echo "************************************"
 echo " Export AppID Information "
 echo "************************************"
 
-# exportAppIDInformation
+exportAppIDInformation
 
 echo "************************************"
 echo " Configure AppID Information "
 echo "************************************"
 
-configureAppIDInformation
+#configureAppIDInformation
 
 
 
