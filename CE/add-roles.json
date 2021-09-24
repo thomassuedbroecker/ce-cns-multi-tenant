@@ -1,0 +1,7 @@
+{
+    "roles": {
+      "ids": [
+        "multi_tenant_access"
+      ]
+    }
+}

@@ -29,6 +29,7 @@ export ENCRYPTION_SECRET="12345678"
 # Application
 export ADD_APPLICATION="./add-application.json"
 export ADD_SCOPE="./add-scope.json"
+export ADD_ROLE="./add-role.json"
 export APPLICATION_CLIENTID=""
 export APPLICATION_TENANTID=""
 export APPLICATION_OAUTHSERVERURL=""
@@ -109,10 +110,18 @@ configureAppIDService(){
     echo "$APPLICATION_CLIENTID"
     echo "$APPLICATION_TENANTID"
     echo "$APPLICATION_OAUTHSERVERURL"
+    echo ""
     echo "-------------------------"
     echo " Add scope"
     echo "-------------------------"
     result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes)
+    echo "-------------------------"
+    echo "Result: $result"
+    echo "-------------------------"
+    echo "-------------------------"
+    echo " Add role"
+    echo "-------------------------"
+    result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/roles)
     echo "-------------------------"
     echo "Result: $result"
     echo "-------------------------"
@@ -145,19 +154,19 @@ echo "************************************"
 echo " Get AppID Information "
 echo "************************************"
 
-getUsersAppIDService
+# getUsersAppIDService
 
 echo "************************************"
 echo " Export AppID Information "
 echo "************************************"
 
-exportAppIDInformation
+# exportAppIDInformation
 
 echo "************************************"
 echo " Configure AppID Information "
 echo "************************************"
 
-# configureAppIDInformation
+configureAppIDInformation
 
 
 
