@@ -11,6 +11,8 @@ export SERVICE_PLAN="lite"
 export APPID_SERVICE_NAME="appid"
 #export YOUR_SERVICE_FOR_APPID="appID-multi-tenancy-example-tsuedbro"
 export YOUR_SERVICE_FOR_APPID="multi-tenancy-AppID"
+export APPID_SERVICE_KEY_NAME="multi-tenancy-AppID-service-key"
+export APPID_SERVICE_KEY_ROLE="Manager"
 export TENANTID=""
 export MANAGEMENTURL=""
 # "AppID-multi-tenancy"
@@ -22,9 +24,11 @@ createAppIDService() {
     ibmcloud target -r $REGION
     ibmcloud catalog service-marketplace | grep $APPID_SERVICE_NAME
     # Create AppID service
-    # ibmcloud resource service-instance-create $YOUR_SERVICE_FOR_APPID $APPID_SERVICE_NAME $SERVICE_PLAN $REGION
+    #ibmcloud resource service-instance-create $YOUR_SERVICE_FOR_APPID $APPID_SERVICE_NAME $SERVICE_PLAN $REGION
     # Show AppID service instance details
     ibmcloud resource service-instance $YOUR_SERVICE_FOR_APPID
+    # Create a service key for the service
+    ibmcloud resource service-key-create $APPID_SERVICE_KEY_NAME $APPID_SERVICE_KEY_ROLE --instance-name $YOUR_SERVICE_FOR_APPID
     # Get existing service keys for the service
     ibmcloud resource service-keys --instance-name $YOUR_SERVICE_FOR_APPID
     # Get the details for the service keys for the service
