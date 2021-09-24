@@ -28,6 +28,7 @@ export ENCRYPTION_SECRET="12345678"
 
 # Application
 export ADD_APPLICATION="./add-application.json"
+export ADD_SCOPE="./add-scope.json"
 export APPLICATION_CLIENTID=""
 export APPLICATION_TENANTID=""
 export APPLICATION_OAUTHSERVERURL=""
@@ -102,6 +103,10 @@ configureAppIDService(){
     APPLICATION_CLIENTID=$(echo "$result" | grep "clientId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     APPLICATION_TENANTID=$(echo "$result" | grep "tenantId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     APPLICATION_OAUTHSERVERURL=$(echo "$result" | grep "oAuthServerUrl" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
+    echo "$APPLICATION_CLIENTID"
+    echo "$APPLICATION_TENANTID"
+    echo "$APPLICATION_OAUTHSERVERURL"
+    result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes)
 
 }
 
