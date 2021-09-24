@@ -22,14 +22,14 @@ export TENANTID=""
 export MANAGEMENTURL=""
 
 # User
-export USER_IMPORT_FILE="./user-import.json"
-export USER_EXPORT_FILE="./user-export.json"
+export USER_IMPORT_FILE="user-import.json"
+export USER_EXPORT_FILE="user-export.json"
 export ENCRYPTION_SECRET="12345678"
 
 # Application
-export ADD_APPLICATION="./add-application.json"
-export ADD_SCOPE="./add-scope.json"
-export ADD_ROLE="./add-role.json"
+export ADD_APPLICATION="add-application.json"
+export ADD_SCOPE="add-scope.json"
+export ADD_ROLE="add-roles.json"
 export APPLICATION_CLIENTID=""
 export APPLICATION_TENANTID=""
 export APPLICATION_OAUTHSERVERURL=""
@@ -91,7 +91,7 @@ getUsersAppIDService() {
     echo ""
 }
 
-configureAppIDService(){
+configureAppIDInformation(){
     # Get OAUTHTOKEN for IAM IBM Cloud
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     #echo "Auth Token: $OAUTHTOKEN"
@@ -100,28 +100,41 @@ configureAppIDService(){
     echo " Create application"
     echo "-------------------------"
     echo ""
-    result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
+    export result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
     echo "-------------------------"
     echo "Result: $result"
     echo "-------------------------"
-    APPLICATION_CLIENTID=$(echo "$result" | grep "clientId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
-    APPLICATION_TENANTID=$(echo "$result" | grep "tenantId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
-    APPLICATION_OAUTHSERVERURL=$(echo "$result" | grep "oAuthServerUrl" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
-    echo "$APPLICATION_CLIENTID"
-    echo "$APPLICATION_TENANTID"
-    echo "$APPLICATION_OAUTHSERVERURL"
+    #APPLICATION_CLIENTID=$(echo $result | grep 'clientId' | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
+    APPLICATION_CLIENTID=$(echo $result | sed -n 's|.*"clientId":"\([^"]*\)".*|\1|p')
+    #APPLICATION_TENANTID=$(echo $result | grep "tenantId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
+    APPLICATION_TENANTID=$(echo $result | sed -n 's|.*"tenantId":"\([^"]*\)".*|\1|p')
+    #APPLICATION_OAUTHSERVERURL=$(echo "$result" | grep "oAuthServerUrl" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
+    APPLICATION_OAUTHSERVERURL=$(echo $result | sed -n 's|.*"oAuthServerUrl":"\([^"]*\)".*|\1|p')
+    echo "ClientID: $APPLICATION_CLIENTID"
+    echo "TenantID: $APPLICATION_TENANTID"
+    echo "oAuthServerUrl: $APPLICATION_OAUTHSERVERURL"
+    sleep 10
+    echo ""
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    curl $MANAGEMENTURL/applications -H "Authorization: Bearer $OAUTHTOKEN"
     echo ""
     echo "-------------------------"
     echo " Add scope"
     echo "-------------------------"
-    result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes)
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    url=$MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes
+    echo $url
+    curl $url -H "Authorization: Bearer $OAUTHTOKEN"
+    result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $url)
     echo "-------------------------"
     echo "Result: $result"
     echo "-------------------------"
     echo "-------------------------"
     echo " Add role"
     echo "-------------------------"
-    result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/roles)
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    echo $OAUTHTOKEN
+    result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/roles)
     echo "-------------------------"
     echo "Result: $result"
     echo "-------------------------"
@@ -138,7 +151,7 @@ exportAppIDInformation(){
     export OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     USER_EXPORT=$(curl $MANAGEMENTURL/cloud_directory/export?encryption_secret=$ENCRYPTION_SECRET -H "Authorization: Bearer $OAUTHTOKEN")
     echo ""
-    echo "$USER_EXPORT" > $USER_EXPORT_FILE
+    echo "$USER_EXPORT" > ./$USER_EXPORT_FILE
     echo ""
 }
 

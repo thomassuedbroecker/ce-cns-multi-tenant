@@ -1,5 +1,7 @@
 {
-    "scopes": [
-      "multi_tenant_access"
-    ]
+  "scopes": [
+    "cartoons",
+    "horror",
+    "animated"
+  ]
 }
