@@ -16,6 +16,8 @@ export APPID_SERVICE_KEY_NAME="multi-tenancy-AppID-service-key"
 export APPID_SERVICE_KEY_ROLE="Manager"
 export TENANTID=""
 export MANAGEMENTURL=""
+export ADD_APPLICATION="./add-application.json"
+export ENCRYPTION_SECRET="12345678"
 # "AppID-multi-tenancy"
 
 # **************** Functions ****************************
@@ -57,16 +59,32 @@ getUsersAppIDService() {
     echo " Export users"
     echo "-------------------------"
     curl -i $MANAGEMENTURL/users/export -H "Authorization: Bearer $OAUTHTOKEN"
+    # Invoke a cloud directory export users curl command
+    echo "-------------------------"
+    echo " Cloud directory export users"
+    echo "-------------------------"
+    curl -i $MANAGEMENTURL/cloud_directory/export?encryption_secret=$ENCRYPTION_SECRET -H "Authorization: Bearer $OAUTHTOKEN"
     # Invoke get redirect uris
     echo "-------------------------"
     echo " List uris"
     echo "-------------------------"
     curl -i $MANAGEMENTURL/config/redirect_uris -H "Authorization: Bearer $OAUTHTOKEN"
     # Invoke get applications
+    echo ""
     echo "-------------------------"
     echo " List applications"
     echo "-------------------------"
     curl -i $MANAGEMENTURL/applications -H "Authorization: Bearer $OAUTHTOKEN"
+    echo ""
+    # Get OAUTHTOKEN for IAM IBM Cloud
+    export OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    echo "Auth Token: $OAUTHTOKEN"
+    echo ""
+    echo "-------------------------"
+    echo " Create application"
+    echo "-------------------------"
+    #result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
+    #echo "Result: $result"
 }
 
 
