@@ -29,5 +29,11 @@ COPY --from=BUILD --chown=1001 /usr/src/app/target/quarkus-app/quarkus/ /deploym
 # Environment variables
 COPY ./docker_entrypoint_start-quarkus.sh ./docker_entrypoint_start-quarkus.sh
 RUN chmod 777 docker_entrypoint_start-quarkus.sh 
-EXPOSE 8083
+# **********
+# Local
+#EXPOSE 8083
+# **********
+# Code Engie
+EXPOSE 8080
+
 CMD ["/bin/sh","docker_entrypoint_start-quarkus.sh"]
