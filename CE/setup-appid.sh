@@ -8,6 +8,10 @@
 export RESOURCE_GROUP=default
 #export REGION="us-south"
 export REGION="eu-de"
+
+# "AppID-multi-tenancy"
+
+# Service
 export SERVICE_PLAN="lite"
 export APPID_SERVICE_NAME="appid"
 #export YOUR_SERVICE_FOR_APPID="appID-multi-tenancy-example-tsuedbro"
@@ -16,11 +20,19 @@ export APPID_SERVICE_KEY_NAME="multi-tenancy-AppID-service-key"
 export APPID_SERVICE_KEY_ROLE="Manager"
 export TENANTID=""
 export MANAGEMENTURL=""
-export ADD_APPLICATION="./add-application.json"
+
+# User
 export USER_IMPORT_FILE="./user-import.json"
 export USER_EXPORT_FILE="./user-export.json"
 export ENCRYPTION_SECRET="12345678"
-# "AppID-multi-tenancy"
+
+# Application
+export ADD_APPLICATION="./add-application.json"
+export APPLICATION_CLIENTID=""
+export APPLICATION_TENANTID=""
+export APPLICATION_OAUTHSERVERURL=""
+
+
 
 # **************** Functions ****************************
 
@@ -87,7 +99,8 @@ configureAppIDService(){
     echo "-------------------------"
     echo ""
     result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
-    echo "Result: $result"
+    APPLICATION_CLIENTID=$(echo "$result" | grep "clientId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
+    APPLICATION_CLIENTID=$(echo "$result" | grep "clientId" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     # Get OAUTHTOKEN for IAM IBM Cloud
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     #echo "Auth Token: $OAUTHTOKEN"
