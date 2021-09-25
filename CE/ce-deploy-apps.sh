@@ -11,11 +11,33 @@ export RESOURCE_GROUP=default
 export REPOSITORY=tsuedbroecker
 export REGION="us-south"
 export NAMESPACE=""
-export KEYCLOAK_URL=""
 export WEBAPI_URL=""
 export WEBAPP_URL=""
 export ARTICEL_URL=""
 export STATUS="Running"
+
+# Service
+export SERVICE_PLAN="lite"
+export APPID_SERVICE_NAME="appid"
+#export YOUR_SERVICE_FOR_APPID="appID-multi-tenancy-example-tsuedbro"
+export YOUR_SERVICE_FOR_APPID="multi-tenancy-AppID"
+export APPID_SERVICE_KEY_NAME="multi-tenancy-AppID-service-key"
+export APPID_SERVICE_KEY_ROLE="Manager"
+export TENANTID=""
+export MANAGEMENTURL=""
+
+# User
+export USER_IMPORT_FILE="user-import.json"
+export USER_EXPORT_FILE="user-export.json"
+export ENCRYPTION_SECRET="12345678"
+
+# Application
+export ADD_APPLICATION="add-application.json"
+export ADD_SCOPE="add-scope.json"
+export ADD_ROLE="add-roles.json"
+export APPLICATION_CLIENTID=""
+export APPLICATION_TENANTID=""
+export APPLICATION_OAUTHSERVERURL=""
 
 # **********************************************************************************
 # Functions definition
@@ -54,108 +76,123 @@ function setupCLIenvCE() {
  
 }
 
-# ****** AppID ******
+# **** AppID ****
 
-function deployKeycloak(){
-
-    ibmcloud ce application create --name keycloak \
-                                --image "quay.io/keycloak/keycloak:10.0.2" \
-                                --cpu 0.5 \
-                                --memory 1G \
-                                --env KEYCLOAK_USER="admin" \
-                                --env KEYCLOAK_PASSWORD="admin" \
-                                --env PROXY_ADDRESS_FORWARDING="true" \
-                                --max-scale 1 \
-                                --min-scale 1 \
-                                --port 8080 
-
-    # checkKubernetesPod "keycloak"
-   
-    ibmcloud ce application get --name keycloak
-    KEYCLOAK_URL=$(ibmcloud ce application get --name keycloak | grep "https://keycloak." |  awk '/keycloak/ {print $2}')
-    echo "Set Keycloak URL: $KEYCLOAK_URL/auth"
+createAppIDService() {
+    ibmcloud target -g $RESOURCE_GROUP
+    ibmcloud target -r $REGION
+    # Create AppID service
+    ibmcloud resource service-instance-create $YOUR_SERVICE_FOR_APPID $APPID_SERVICE_NAME $SERVICE_PLAN $REGION
+    # Create a service key for the service
+    ibmcloud resource service-key-create $APPID_SERVICE_KEY_NAME $APPID_SERVICE_KEY_ROLE --instance-name $YOUR_SERVICE_FOR_APPID
+    # Get the tenantId of the AppID service key
+    TENANTID=$(ibmcloud resource service-keys --instance-name $YOUR_SERVICE_FOR_APPID --output json | grep "tenantId" | awk '{print $2;}' | sed 's/"//g')
+    echo "Tenant ID: $TENANTID"
+    # Get the managementUrl of the AppID from service key
+    MANAGEMENTURL=$(ibmcloud resource service-keys --instance-name $YOUR_SERVICE_FOR_APPID --output json | grep "managementUrl" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
+    echo "Management URL: $MANAGEMENTURL"
 }
 
-function configureKeycloak() {
-    echo "************************************"
-    echo " Configure Keycloak realm"
-    echo "************************************"
+configureAppIDInformation(){
 
-    # Set the needed parameter
-    USER=admin
-    PASSWORD=admin
-    GRANT_TYPE=password
-    CLIENT_ID=admin-cli
-
-    access_token=$( curl -d "client_id=$CLIENT_ID" -d "username=$USER" -d "password=$PASSWORD" -d "grant_type=$GRANT_TYPE" "$KEYCLOAK_URL/auth/realms/master/protocol/openid-connect/token" | sed -n 's|.*"access_token":"\([^"]*\)".*|\1|p')
-
-    echo "Access token : $access_token"
-
-    # Create the realm in Keycloak
-    echo "------------------------------------------------------------------------"
-    echo "Create the realm in Keycloak"
-    echo "------------------------------------------------------------------------"
+    #****** Set identity providers
+    echo ""
+    echo "-------------------------"
+    echo " Set identity providers"
+    echo "-------------------------"
+    echo ""
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    result=$(curl -d @./idps-custom.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/custom)
+    echo ""
+    echo "-------------------------"
+    echo "Result custom: $result"
+    echo "-------------------------"
+    echo ""
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    result=$(curl -d @./idps-facebook.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/facebook)
+    echo ""
+    echo "-------------------------"
+    echo "Result facebook: $result"
+    echo "-------------------------"
+    echo ""
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    result=$(curl -d @./idps-google.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/google)
+    echo ""
+    echo "-------------------------"
+    echo "Result google: $result"
+    echo "-------------------------"
+    echo ""
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    result=$(curl -d @./idps-clouddirectory.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/cloud_directory)
+    echo ""
+    echo "-------------------------"
+    echo "Result cloud directory: $result"
+    echo "-------------------------"
     echo ""
 
-    result=$(curl -d @./cns-realm.json -H "Content-Type: application/json" -H "Authorization: bearer $access_token" "$KEYCLOAK_URL/auth/admin/realms")
-
-    if [ "$result" = "" ]; then
-    echo "------------------------------------------------------------------------"
-    echo "The realm is created."
-    echo "Open following link in your browser:"
-    echo "$KEYCLOAK_URL/auth/admin/master/console/#/realms/quarkus"
-    echo "------------------------------------------------------------------------"
-    else
-    echo "------------------------------------------------------------------------"
-    echo "It seems there is a problem with the realm creation: $result"
-    echo "------------------------------------------------------------------------"
-    fi
-}
-
-function reconfigureKeycloak (){
-    REALM=cns-realm.json
-    UPDATE_REALM=update-cns-realm.json
-
-    SEARCH="https://YOUR-URL"
-    REPLACE="$WEBAPP_URL"
-    sed "s+$SEARCH+$REPLACE+g" ./$REALM > ./$UPDATE_REALM
-
-    # Set the needed parameter
-    USER=admin
-    PASSWORD=admin
-    GRANT_TYPE=password
-    CLIENT_ID=admin-cli
-
-    access_token=$( curl -d "client_id=$CLIENT_ID" -d "username=$USER" -d "password=$PASSWORD" -d "grant_type=$GRANT_TYPE" "$KEYCLOAK_URL/auth/realms/master/protocol/openid-connect/token" | sed -n 's|.*"access_token":"\([^"]*\)".*|\1|p')
-
-    echo "Access token : $access_token"
-
-    # Update the realm in Keycloak
-    echo "------------------------------------------------------------------------"
-    echo "Create the realm in Keycloak"
-    echo "------------------------------------------------------------------------"
+    #****** Add application ******
+    echo ""
+    echo "-------------------------"
+    echo " Create application"
+    echo "-------------------------"
+    echo ""
+    result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
+    echo "-------------------------"
+    echo "Result application: $result"
+    echo "-------------------------"
+    APPLICATION_CLIENTID=$(echo $result | sed -n 's|.*"clientId":"\([^"]*\)".*|\1|p')
+    APPLICATION_TENANTID=$(echo $result | sed -n 's|.*"tenantId":"\([^"]*\)".*|\1|p')
+    APPLICATION_OAUTHSERVERURL=$(echo $result | sed -n 's|.*"oAuthServerUrl":"\([^"]*\)".*|\1|p')
+    echo "ClientID: $APPLICATION_CLIENTID"
+    echo "TenantID: $APPLICATION_TENANTID"
+    echo "oAuthServerUrl: $APPLICATION_OAUTHSERVERURL"
     echo ""
 
-    result=$(curl -d @./$UPDATE_REALM -H "Content-Type: application/json" -H "Authorization: bearer $access_token" "$KEYCLOAK_URL/auth/admin/realms")
+    #****** Add scope ******
+    echo ""
+    echo "-------------------------"
+    echo " Add scope"
+    echo "-------------------------"
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes)
+    echo "-------------------------"
+    echo "Result scope: $result"
+    echo "-------------------------"
+    echo ""
 
-    if [ "$result" = "" ]; then
-    echo "------------------------------------------------------------------------"
-    echo "The realm is created."
-    echo "Open following link in your browser:"
-    echo "$KEYCLOAK_URL/auth/admin/master/console/#/realms/quarkus"
-    echo "------------------------------------------------------------------------"
-    else
-    echo "------------------------------------------------------------------------"
-    echo "It seems there is a problem with the realm creation: $result"
-    echo "------------------------------------------------------------------------"
-    fi
+    #****** Add role ******
+    echo "-------------------------"
+    echo " Add role"
+    echo "-------------------------"
+    #Create file from template
+    sed "s+APPLICATIONID+$APPLICATION_CLIENTID+g" ./add-roles-template.json > ./$ADD_ROLE
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    #echo $OAUTHTOKEN
+    result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/roles)
+    echo "-------------------------"
+    echo "Result role: $result"
+    echo "-------------------------"
+    echo ""
+ 
+    #****** Import cloud directory users ******
+    echo ""
+    echo "-------------------------"
+    echo " Cloud directory import users"
+    echo "-------------------------"
+    echo ""
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    result=$(curl -d @./$USER_IMPORT_FILE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/cloud_directory/import?encryption_secret=$ENCRYPTION_SECRET)
+    echo "-------------------------"
+    echo "Result import: $result"
+    echo "-------------------------"
+    echo ""
 }
 
 # **** application and microservices ****
 
 function deployArticles(){
 
-    ibmcloud ce application create --name articles --image "quay.io/$REPOSITORY/articles-ce:v3" \
+    ibmcloud ce application create --name articles --image "quay.io/$REPOSITORY/articles-ce-appid:v1" \
                                    --cpu "0.25" \
                                    --memory "0.5G" \
                                    --env QUARKUS_OIDC_AUTH_SERVER_URL="$KEYCLOAK_URL/auth/realms/quarkus" \
@@ -174,7 +211,7 @@ function deployWebAPI(){
     
     # Valid vCPU and memory combinations: https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo
     ibmcloud ce application create --name web-api \
-                                --image "quay.io/$REPOSITORY/web-api-ce:v7" \
+                                --image "quay.io/$REPOSITORY/web-api-appid:v1" \
                                 --cpu "0.5" \
                                 --memory "1G" \
                                 --env QUARKUS_OIDC_AUTH_SERVER_URL="$KEYCLOAK_URL/auth/realms/quarkus" \
@@ -193,7 +230,7 @@ function deployWebAPI(){
 function deployWebApp(){
 
     ibmcloud ce application create --name web-app \
-                                --image "quay.io/$REPOSITORY/web-app-ce:v2" \
+                                --image "quay.io/$REPOSITORY/web-app-ce-appid:v1" \
                                 --cpu 0.5 \
                                 --memory 1G \
                                 --env VUE_APP_KEYCLOAK="$KEYCLOAK_URL/auth" \
@@ -202,25 +239,6 @@ function deployWebApp(){
                                 --max-scale 1 \
                                 --min-scale 0 \
                                 --port 8080 
-                                # [--argument ARGUMENT] \
-                                # [--cluster-local] \
-                                # [--command COMMAND] \
-                                # [--concurrency CONCURRENCY] \
-                                # [--concurrency-target CONCURRENCY_TARGET] \
-                                # [--env-from-configmap ENV_FROM_CONFIGMAP] \
-                                # [--env-from-secret ENV_FROM_SECRET] \
-                                # [--ephemeral-storage EPHEMERAL_STORAGE] \
-                                # [--mount-configmap MOUNT_CONFIGMAP] \
-                                # [--mount-secret MOUNT_SECRET] \
-                                # [--no-cluster-local] \
-                                # [--no-wait] \
-                                # [--quiet] \
-                                # [--registry-secret REGISTRY_SECRET] \
-                                # [--request-timeout REQUEST_TIMEOUT] \
-                                # [--revision-name REVISION_NAME] \
-                                # [--user USER] \
-                                # [--wait] \
-                                # [--wait-timeout WAIT_TIMEOUT]
 
     ibmcloud ce application get --name web-app
     WEBAPP_URL=$(ibmcloud ce application get --name web-app | grep "https://web-app." |  awk '/web-app/ {print $2}')
@@ -331,15 +349,6 @@ echo "************************************"
 
 deployWebApp
 ibmcloud ce application events --application web-app
-
-echo "************************************"
-echo " keycloak"
-echo "************************************"
-
-deployKeycloak
-# create realm with redirect url
-reconfigureKeycloak 
-ibmcloud ce application events --application keycloak
 
 echo "************************************"
 echo " articles"
