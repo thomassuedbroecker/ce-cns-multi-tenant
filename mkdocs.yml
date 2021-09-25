@@ -18,6 +18,7 @@ nav:
   - Implementation details:
     - Vue.js extract domain from email: details-email-domain.md 
     - Quakus extract tenant and reconfigure OIDC configuration: details-quarkus-extract-tenant.md
+    - Setup AppID service: setup-appid.md
   - Labs: 
     - 1. TBD: ./lab-tbd.md
   - Optional Labs: 

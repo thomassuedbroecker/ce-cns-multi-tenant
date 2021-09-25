@@ -1,11 +1,11 @@
 {
-  "name": "multi_tenant",
+  "name": "ce_user_access",
   "description": "This is an example role.",
   "access": [
     {
-      "application_id": "423e75d8-2f09-4986-8796-878b89cd061a",
+      "application_id": "",
       "scopes": [
-        "multi_tenant_access"
+        "cns_example_scope"
       ]
     }
   ]

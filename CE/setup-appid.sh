@@ -34,8 +34,6 @@ export APPLICATION_CLIENTID=""
 export APPLICATION_TENANTID=""
 export APPLICATION_OAUTHSERVERURL=""
 
-
-
 # **************** Functions ****************************
 
 createAppIDService() {
@@ -139,7 +137,7 @@ configureAppIDInformation(){
     echo ""
     result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
     echo "-------------------------"
-    echo "Result: $result"
+    echo "Result application: $result"
     echo "-------------------------"
     #APPLICATION_CLIENTID=$(echo $result | grep 'clientId' | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     APPLICATION_CLIENTID=$(echo $result | sed -n 's|.*"clientId":"\([^"]*\)".*|\1|p')
@@ -153,19 +151,19 @@ configureAppIDInformation(){
     echo ""
 
     #****** Add scope ******
-    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     echo ""
     echo "-------------------------"
     echo " Add scope"
     echo "-------------------------"
 
-    #****** Add role ******
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes)
     echo "-------------------------"
-    echo "Result: $result"
+    echo "Result scope: $result"
     echo "-------------------------"
     echo ""
+
+    #****** Add role ******
     echo "-------------------------"
     echo " Add role"
     echo "-------------------------"
@@ -175,7 +173,20 @@ configureAppIDInformation(){
     #echo $OAUTHTOKEN
     result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/roles)
     echo "-------------------------"
-    echo "Result: $result"
+    echo "Result role: $result"
+    echo "-------------------------"
+    echo ""
+ 
+    #****** Import cloud directory users ******
+    echo ""
+    echo "-------------------------"
+    echo " Cloud directory import users"
+    echo "-------------------------"
+    echo ""
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    result=$(curl -d @./$USER_IMPORT_FILE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/cloud_directory/import?encryption_secret=$ENCRYPTION_SECRET)
+    echo "-------------------------"
+    echo "Result import: $result"
     echo "-------------------------"
     echo ""
 }
@@ -203,15 +214,15 @@ echo "************************************"
 
 createAppIDService
 
-echo "************************************"
-echo " Get AppID Information "
-echo "************************************"
+#echo "************************************"
+#echo " Get AppID Information "
+#echo "************************************"
 
-# getUsersAppIDService
+#getUsersAppIDService
 
-echo "************************************"
-echo " Export AppID Information "
-echo "************************************"
+#echo "************************************"
+#echo " Export AppID Information "
+#echo "************************************"
 
 #exportAppIDInformation
 

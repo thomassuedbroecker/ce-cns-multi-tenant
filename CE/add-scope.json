@@ -1,5 +1,5 @@
 {
   "scopes": [
-    "multi_tenant_access"
+    "cns_example_scope"
   ]
 }
