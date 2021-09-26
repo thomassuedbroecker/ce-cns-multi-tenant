@@ -213,8 +213,8 @@ configureAppIDInformation(){
 function deployArticles(){
 
     ibmcloud ce application create --name articles --image "quay.io/$REPOSITORY/articles-ce-appid:v1" \
-                                   --cpu "0.5" \
-                                   --memory "1G" \
+                                   --cpu "1" \
+                                   --memory "2G" \
                                    --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
                                    --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
                                    --max-scale 1 \
@@ -233,8 +233,8 @@ function deployWebAPI(){
     # Valid vCPU and memory combinations: https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo
     ibmcloud ce application create --name web-api \
                                 --image "quay.io/$REPOSITORY/web-api-ce-appid:v1" \
-                                --cpu "0.5" \
-                                --memory "1G" \
+                                --cpu "1" \
+                                --memory "2G" \
                                 --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
                                 --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
                                 --env CNS_ARTICLES_URL_TENANT_A="http://articles.$NAMESPACE.svc.cluster.local/articles" \
@@ -252,16 +252,16 @@ function deployWebAPI(){
 function deployWebApp(){
 
     ibmcloud ce application create --name web-app \
-                                --image "quay.io/$REPOSITORY/web-app-ce-appid:v1" \
-                                --cpu 0.5 \
-                                --memory 1G \
-                                --env VUE_APP_ROOT="/" \
-                                --env VUE_APP_WEBAPI="$WEBAPI_URL/articles" \
-                                --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
-                                --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
-                                --max-scale 1 \
-                                --min-scale 1 \
-                                --port 8080 
+                                   --image "quay.io/$REPOSITORY/web-app-ce-appid:v1" \
+                                   --cpu "1" \
+                                   --memory "2G" \
+                                   --env VUE_APP_ROOT="/" \
+                                   --env VUE_APP_WEBAPI="$WEBAPI_URL/articles" \
+                                   --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
+                                   --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
+                                   --max-scale 1 \
+                                   --min-scale 1 \
+                                   --port 8080 
 
     ibmcloud ce application get --name web-app
     WEBAPP_URL=$(ibmcloud ce application get --name web-app | grep "https://web-app." |  awk '/web-app/ {print $2}')
