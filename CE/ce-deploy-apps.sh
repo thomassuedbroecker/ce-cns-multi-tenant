@@ -25,6 +25,7 @@ export APPID_SERVICE_KEY_NAME="multi-tenancy-AppID-service-key"
 export APPID_SERVICE_KEY_ROLE="Manager"
 export TENANTID=""
 export MANAGEMENTURL=""
+export APPLICATION_DISCOVERYENDPOINT=""
 
 # User
 export USER_IMPORT_FILE="user-import.json"
@@ -143,9 +144,11 @@ configureAppIDInformation(){
     APPLICATION_CLIENTID=$(echo $result | sed -n 's|.*"clientId":"\([^"]*\)".*|\1|p')
     APPLICATION_TENANTID=$(echo $result | sed -n 's|.*"tenantId":"\([^"]*\)".*|\1|p')
     APPLICATION_OAUTHSERVERURL=$(echo $result | sed -n 's|.*"oAuthServerUrl":"\([^"]*\)".*|\1|p')
+    APPLICATION_DISCOVERYENDPOINT=$(echo $result | sed -n 's|.*"discoveryEndpoint":"\([^"]*\)".*|\1|p')
     echo "ClientID: $APPLICATION_CLIENTID"
     echo "TenantID: $APPLICATION_TENANTID"
     echo "oAuthServerUrl: $APPLICATION_OAUTHSERVERURL"
+    echo "discoveryEndpoint: $APPLICATION_DISCOVERYENDPOINT"
     echo ""
 
     #****** Add scope ******
@@ -193,11 +196,12 @@ configureAppIDInformation(){
 function deployArticles(){
 
     ibmcloud ce application create --name articles --image "quay.io/$REPOSITORY/articles-ce-appid:v1" \
-                                   --cpu "0.25" \
-                                   --memory "0.5G" \
-                                   --env QUARKUS_OIDC_AUTH_SERVER_URL="$KEYCLOAK_URL/auth/realms/quarkus" \
+                                   --cpu "0.5" \
+                                   --memory "1G" \
+                                   --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
+                                   --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
                                    --max-scale 1 \
-                                   --min-scale 0 \
+                                   --min-scale 1 \
                                    --cluster-local                                        
     
     ibmcloud ce application get --name articles
@@ -217,7 +221,7 @@ function deployWebAPI(){
                                 --env QUARKUS_OIDC_AUTH_SERVER_URL="$KEYCLOAK_URL/auth/realms/quarkus" \
                                 --env CNS_ARTICLES_URL="http://articles.$NAMESPACE.svc.cluster.local/articles" \
                                 --max-scale 1 \
-                                --min-scale 0 \
+                                --min-scale 1 \
                                 --port 8081 
 
     ibmcloud ce application get --name web-api
@@ -233,9 +237,10 @@ function deployWebApp(){
                                 --image "quay.io/$REPOSITORY/web-app-ce-appid:v1" \
                                 --cpu 0.5 \
                                 --memory 1G \
-                                --env VUE_APP_KEYCLOAK="$KEYCLOAK_URL/auth" \
                                 --env VUE_APP_ROOT="/" \
                                 --env VUE_APP_WEBAPI="$WEBAPI_URL/articles" \
+                                --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
+                                --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
                                 --max-scale 1 \
                                 --min-scale 0 \
                                 --port 8080 
@@ -250,9 +255,10 @@ function deployWebApp(){
 function updateWebApp(){
 
     ibmcloud ce application update --name web-app \
-                                --env VUE_APP_KEYCLOAK="$KEYCLOAK_URL/auth" \
-                                --env VUE_APP_ROOT="/" \
-                                --env VUE_APP_WEBAPI="$WEBAPI_URL"
+                                   --env VUE_APP_ROOT="/" \
+                                   --env VUE_APP_WEBAPI="$WEBAPI_URL/articles" \
+                                   --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
+                                   --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
 
     ibmcloud ce application get --name web-app
     WEBAPP_URL=$(ibmcloud ce application get --name web-app | grep "https://web-app." |  awk '/web-app/ {print $2}')
@@ -351,6 +357,18 @@ deployWebApp
 ibmcloud ce application events --application web-app
 
 echo "************************************"
+echo " AppID creation"
+echo "************************************"
+
+createAppIDService
+
+echo "************************************"
+echo " AppID configuration"
+echo "************************************"
+
+configureAppIDInformation
+
+echo "************************************"
 echo " articles"
 echo "************************************"
 
@@ -386,7 +404,8 @@ getKubeContainerLogs
 echo "************************************"
 echo " URLs"
 echo "************************************"
-echo " - Keycloak : $KEYCLOAK_URL/auth/admin/master/console/#/realms/quarkus"
-echo " - Web-API  : $WEBAPI_URL"
-echo " - Articles : http://articles.$NAMESPACE.svc.cluster.local/articles"
-echo " - Web-App  : $WEBAPP_URL"
+echo " - oAuthServerUrl   : $APPLICATION_OAUTHSERVERURL"
+echo " - discoveryEndpoint: $APPLICATION_DISCOVERYENDPOINT"
+echo " - Web-API          : $WEBAPI_URL"
+echo " - Articles         : http://articles.$NAMESPACE.svc.cluster.local/articles"
+echo " - Web-App          : $WEBAPP_URL"
