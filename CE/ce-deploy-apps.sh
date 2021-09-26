@@ -232,7 +232,7 @@ function deployWebAPI(){
     
     # Valid vCPU and memory combinations: https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo
     ibmcloud ce application create --name web-api \
-                                --image "quay.io/$REPOSITORY/web-api-appid:v1" \
+                                --image "quay.io/$REPOSITORY/web-api-ce-appid:v1" \
                                 --cpu "0.5" \
                                 --memory "1G" \
                                 --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
