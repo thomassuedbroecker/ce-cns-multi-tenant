@@ -32,7 +32,9 @@ export ADD_SCOPE="add-scope.json"
 export ADD_ROLE="add-roles.json"
 export APPLICATION_CLIENTID=""
 export APPLICATION_TENANTID=""
+export APPLICATION_DISCOVERYENDPOINT=""
 export APPLICATION_OAUTHSERVERURL=""
+export APPLICATION_REDIRCT_URIS="add-redirecturis.json"
 
 # **************** Functions ****************************
 
@@ -145,9 +147,12 @@ configureAppIDInformation(){
     APPLICATION_TENANTID=$(echo $result | sed -n 's|.*"tenantId":"\([^"]*\)".*|\1|p')
     #APPLICATION_OAUTHSERVERURL=$(echo "$result" | grep "oAuthServerUrl" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     APPLICATION_OAUTHSERVERURL=$(echo $result | sed -n 's|.*"oAuthServerUrl":"\([^"]*\)".*|\1|p')
+    APPLICATION_DISCOVERYENDPOINT=$(echo $result | sed -n 's|.*"discoveryEndpoint":"\([^"]*\)".*|\1|p')
+
     echo "ClientID: $APPLICATION_CLIENTID"
     echo "TenantID: $APPLICATION_TENANTID"
     echo "oAuthServerUrl: $APPLICATION_OAUTHSERVERURL"
+    echo "discoveryEndpoint: $APPLICATION_DISCOVERYENDPOINT"
     echo ""
 
     #****** Add scope ******
@@ -189,6 +194,19 @@ configureAppIDInformation(){
     echo "Result import: $result"
     echo "-------------------------"
     echo ""
+    
+    #****** Add redirect uris ******
+    echo ""
+    echo "-------------------------"
+    echo " Add redirect usis"
+    echo "-------------------------"
+    echo ""
+    curl $MANAGEMENTURL/config/redirect_uris -H "Authorization: Bearer $OAUTHTOKEN"
+    result=$(curl -d @./$USER_IMPORT_FILE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/cloud_directory/import?encryption_secret=$ENCRYPTION_SECRET)
+    echo "-------------------------"
+    echo "Result import: $result"
+    echo "-------------------------"
+    echo ""
 }
 
 exportAppIDInformation(){
@@ -218,7 +236,7 @@ createAppIDService
 #echo " Get AppID Information "
 #echo "************************************"
 
-#getUsersAppIDService
+getUsersAppIDService
 
 #echo "************************************"
 #echo " Export AppID Information "
@@ -230,7 +248,7 @@ echo "************************************"
 echo " Configure AppID Information "
 echo "************************************"
 
-configureAppIDInformation
+#configureAppIDInformation
 
 
 
