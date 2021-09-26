@@ -237,7 +237,7 @@ function deployWebAPI(){
                                 --memory "1G" \
                                 --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
                                 --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
-                                --env CNS_ARTICLES_URL="http://articles.$NAMESPACE.svc.cluster.local/articles" \
+                                --env CNS_ARTICLES_URL_TENANT_A="http://articles.$NAMESPACE.svc.cluster.local/articles" \
                                 --max-scale 1 \
                                 --min-scale 1 \
                                 --port 8080 
