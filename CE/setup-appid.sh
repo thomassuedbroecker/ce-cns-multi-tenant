@@ -41,21 +41,32 @@ export APPLICATION_OAUTHSERVERURL=""
 createAppIDService() {
     ibmcloud target -g $RESOURCE_GROUP
     ibmcloud target -r $REGION
+    
+    #List pricing in catalog
+    #ibmcloud catalog pricing -r $REGION -p paygo -k service | grep $APPID_SERVICE_NAME | grep "graduated-tier"
+    
     #List AppID service in marketplace
     #ibmcloud catalog service-marketplace | grep $APPID_SERVICE_NAME
+    
     # Create AppID service
     #ibmcloud resource service-instance-create $YOUR_SERVICE_FOR_APPID $APPID_SERVICE_NAME $SERVICE_PLAN $REGION
+    
     # Show AppID service instance details
     ibmcloud resource service-instance $YOUR_SERVICE_FOR_APPID
+    
     # Create a service key for the service
     #ibmcloud resource service-key-create $APPID_SERVICE_KEY_NAME $APPID_SERVICE_KEY_ROLE --instance-name $YOUR_SERVICE_FOR_APPID
+    
     # Get existing service keys for the service
     ibmcloud resource service-keys --instance-name $YOUR_SERVICE_FOR_APPID
+    
     # Get the details for the service keys for the service
     ibmcloud resource service-keys --instance-name $YOUR_SERVICE_FOR_APPID --output json
+    
     # Get the tenantId of the AppID service key
     TENANTID=$(ibmcloud resource service-keys --instance-name $YOUR_SERVICE_FOR_APPID --output json | grep "tenantId" | awk '{print $2;}' | sed 's/"//g')
     echo "Tenant ID: $TENANTID"
+    
     # Get the managementUrl of the AppID from service key
     MANAGEMENTURL=$(ibmcloud resource service-keys --instance-name $YOUR_SERVICE_FOR_APPID --output json | grep "managementUrl" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
     echo "Management URL: $MANAGEMENTURL"
@@ -236,7 +247,7 @@ createAppIDService
 #echo " Get AppID Information "
 #echo "************************************"
 
-getUsersAppIDService
+#getUsersAppIDService
 
 #echo "************************************"
 #echo " Export AppID Information "

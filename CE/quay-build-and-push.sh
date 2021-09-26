@@ -19,7 +19,7 @@ echo ""
 echo "************************************"
 echo " articles"
 echo "************************************"
-cd $ROOT_PATH/code/articles-tenant
+cd $ROOT_PATH/code/articles-data-tenant
 podman login quay.io
 podman build -t "quay.io/$REPOSITORY/articles-ce-appid:v1" -f Dockerfile .
 podman push "quay.io/$REPOSITORY/articles-ce-appid:v1"

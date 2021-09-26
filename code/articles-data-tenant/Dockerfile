@@ -2,7 +2,7 @@
 #           BUILD
 ##############################
 
-FROM adoptopenjdk/maven-openjdk11 as BUILD
+FROM "docker.io/adoptopenjdk/maven-openjdk11" as BUILD
 COPY src /usr/src/app/src
 COPY pom.xml /usr/src/app
 WORKDIR /usr/src/app
@@ -11,7 +11,8 @@ RUN mvn package
 ##############################
 #           PRODUCTION
 ##############################
-FROM adoptopenjdk/openjdk11-openj9:ubi-minimal
+#FROM "docker.io/adoptopenjdk/openjdk11-openj9:ubi-minimal"
+FROM "docker.io/adoptopenjdk:openj9"
 
 ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 ENV AB_ENABLED=jmx_exporter

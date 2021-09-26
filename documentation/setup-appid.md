@@ -132,7 +132,7 @@ result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -X POST -H "Au
 ```
 
 
-#### Import users
+#### e. Import users
 
 ```sh
 result=$(curl -d @./$USER_IMPORT_FILE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/cloud_directory/import?encryption_secret=$ENCRYPTION_SECRET)
@@ -143,3 +143,22 @@ Format of an exported user, which will be imported.
 ```json
 {"itemsPerPage":1,"totalResults":1,"users":[{"scimUser":{"originalId":"7cdf7ac3-371f-4b4c-8d0a-81e479ab449b","name":{"givenName":"Thomas","familyName":"Example","formatted":"Thomas Example"},"displayName":"Thomas Example","active":true,"emails":[{"value":"thomas@example.com","primary":true}],"passwordHistory":[{"passwordHash":"L6EEYnQANBPSBF0tDCPDZl4uVD07H3Ur8qIVynB1Ht4Bn4s/x0lA6kvyJxEPr/06m5hi5wdLM45JtYDlT8M0hjVIBI3YpXRR9J4oXZA/Yt/V13yjsUPsXKek6RWdOKWp+wuD5w3Bobh43QbRR3dXFoKUbcLVWQoKLWqvRATMQis=","hashAlgorithm":"PBKDF2WithHmacSHA512"}],"status":"CONFIRMED","passwordExpirationTimestamp":0,"passwordUpdatedTimestamp":0,"mfaContext":{}},"passwordHash":"L6EEYnQANBPSBF0tDCPDZl4uVD07H3Ur8qIVynB1Ht4Bn4s/x0lA6kvyJxEPr/06m5hi5wdLM45JtYDlT8M0hjVIBI3YpXRR9J4oXZA/Yt/V13yjsUPsXKek6RWdOKWp+wuD5w3Bobh43QbRR3dXFoKUbcLVWQoKLWqvRATMQis=","passwordHashAlg":"PBKDF2WithHmacSHA512","profile":{"attributes":{}},"roles":["ce_user_access"]}]}
 ```
+
+#### f. Configure redirect URLs
+
+```sh
+OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+result=$(curl -d @./$ADD_REDIRECT_URIS -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/redirect_uris)
+```
+
+```json
+{
+    "redirectUris": [
+      "http://localhost:8080/*",
+      "APPLICATION_REDIRECT_URL/*"
+    ],
+    "additionalProp1": {}
+}
+```
+
+

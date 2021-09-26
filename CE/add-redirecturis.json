@@ -1,7 +1,7 @@
 {
     "redirectUris": [
       "http://localhost:8080/*",
-      "APPLICATION_REDIRECT_URL/*"
+      "https://web-app.eqiatmmvvti.us-south.codeengine.appdomain.cloud/*"
     ],
     "additionalProp1": {}
-  }
+}

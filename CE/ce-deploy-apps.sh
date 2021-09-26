@@ -6,7 +6,8 @@
 
 # **************** Global variables
 
-export PROJECT_NAME=$MYPROJECT
+#export PROJECT_NAME=$MYPROJECT
+export PROJECT_NAME=cloud-native-starter-ce-workshop
 export RESOURCE_GROUP=default
 export REPOSITORY=tsuedbroecker
 export REGION="us-south"
@@ -17,10 +18,10 @@ export ARTICEL_URL=""
 export STATUS="Running"
 
 # Service
-export SERVICE_PLAN="lite"
+export SERVICE_PLAN="graduated-tier"
 export APPID_SERVICE_NAME="appid"
 #export YOUR_SERVICE_FOR_APPID="appID-multi-tenancy-example-tsuedbro"
-export YOUR_SERVICE_FOR_APPID="multi-tenancy-AppID"
+export YOUR_SERVICE_FOR_APPID="multi-tenancy-AppID-automated-tsuedbro"
 export APPID_SERVICE_KEY_NAME="multi-tenancy-AppID-service-key"
 export APPID_SERVICE_KEY_ROLE="Manager"
 export TENANTID=""
@@ -36,6 +37,7 @@ export ENCRYPTION_SECRET="12345678"
 export ADD_APPLICATION="add-application.json"
 export ADD_SCOPE="add-scope.json"
 export ADD_ROLE="add-roles.json"
+export ADD_REDIRECT_URIS="add-redirecturis.json"
 export APPLICATION_CLIENTID=""
 export APPLICATION_TENANTID=""
 export APPLICATION_OAUTHSERVERURL=""
@@ -55,7 +57,7 @@ function setupCLIenvCE() {
   ibmcloud ce project select -n $PROJECT_NAME
   
   #to use the kubectl commands
-  ibmcloud ce project select -n $PROJECT_NAME --kubecfg true
+  ibmcloud ce project select -n $PROJECT_NAME --kubecfg
   
   # NAMESPACE=$(kubectl get namespaces | awk '/NAME/ { getline; print $0;}' | awk '{print $1;}')
   # NAMESPACE=$(ibmcloud ce project get --name $PROJECT_NAME --output json | sed -n 's|.*"namespace":"\([^"]*\)".*|\1|p')
@@ -233,7 +235,8 @@ function deployWebAPI(){
                                 --image "quay.io/$REPOSITORY/web-api-appid:v1" \
                                 --cpu "0.5" \
                                 --memory "1G" \
-                                --env QUARKUS_OIDC_AUTH_SERVER_URL="$KEYCLOAK_URL/auth/realms/quarkus" \
+                                --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
+                                --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
                                 --env CNS_ARTICLES_URL="http://articles.$NAMESPACE.svc.cluster.local/articles" \
                                 --max-scale 1 \
                                 --min-scale 1 \
@@ -257,7 +260,7 @@ function deployWebApp(){
                                 --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
                                 --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
                                 --max-scale 1 \
-                                --min-scale 0 \
+                                --min-scale 1 \
                                 --port 8080 
 
     ibmcloud ce application get --name web-app
@@ -365,7 +368,7 @@ echo "************************************"
 setupCLIenvCE
 
 echo "************************************"
-echo " web-app (to get the redirect URL for Keycloak)"
+echo " web-app (to get the redirect URL for AppID)"
 echo "************************************"
 
 deployWebApp
@@ -398,7 +401,7 @@ deployWebAPI
 ibmcloud ce application events --application web-api
 
 echo "************************************"
-echo " update web-app"
+echo " update web-app wit the information from AppID "
 echo "************************************"
 
 updateWebApp
