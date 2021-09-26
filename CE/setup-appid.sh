@@ -30,11 +30,11 @@ export ENCRYPTION_SECRET="12345678"
 export ADD_APPLICATION="add-application.json"
 export ADD_SCOPE="add-scope.json"
 export ADD_ROLE="add-roles.json"
+export ADD_REDIRECT_URIS="add-redirecturis.json"
 export APPLICATION_CLIENTID=""
 export APPLICATION_TENANTID=""
 export APPLICATION_DISCOVERYENDPOINT=""
 export APPLICATION_OAUTHSERVERURL=""
-export APPLICATION_REDIRCT_URIS="add-redirecturis.json"
 
 # **************** Functions ****************************
 
@@ -198,13 +198,13 @@ configureAppIDInformation(){
     #****** Add redirect uris ******
     echo ""
     echo "-------------------------"
-    echo " Add redirect usis"
+    echo " Add redirect uris"
     echo "-------------------------"
     echo ""
-    curl $MANAGEMENTURL/config/redirect_uris -H "Authorization: Bearer $OAUTHTOKEN"
-    result=$(curl -d @./$USER_IMPORT_FILE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/cloud_directory/import?encryption_secret=$ENCRYPTION_SECRET)
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    result=$(curl -d @./$ADD_REDIRECT_URIS -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/redirect_uris)
     echo "-------------------------"
-    echo "Result import: $result"
+    echo "Result redirect uris: $result"
     echo "-------------------------"
     echo ""
 }

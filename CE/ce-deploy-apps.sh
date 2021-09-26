@@ -189,6 +189,21 @@ configureAppIDInformation(){
     echo "Result import: $result"
     echo "-------------------------"
     echo ""
+
+    #****** Add redirect uris ******
+    echo ""
+    echo "-------------------------"
+    echo " Add redirect uris"
+    echo "-------------------------"
+    echo ""
+    OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
+    #Create file from template
+    sed "s+APPLICATION_REDIRECT_URL+$WEBAPP_URL+g" ./add-redirecturis-template.json > ./$ADD_REDIRECT_URIS
+    result=$(curl -d @./$ADD_REDIRECT_URIS -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/redirect_uris)
+    echo "-------------------------"
+    echo "Result redirect uris: $result"
+    echo "-------------------------"
+    echo ""
 }
 
 # **** application and microservices ****
