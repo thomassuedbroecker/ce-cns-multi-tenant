@@ -31,8 +31,8 @@ COPY --from=BUILD --chown=1001 /usr/src/app/target/quarkus-app/quarkus/ /deploym
 # useful entry on GitHub https://github.com/knative/serving/issues/7450
 # **********
 # Local
-EXPOSE 8084 
+# EXPOSE 8084 
 # **********
-# Code Engie
-# EXPOSE 8080
-CMD ["java", "-Xmx128m", "-XX:+IdleTuningGcOnIdle", "-Xtune:virtualized", "-Xscmx128m", "-Xscmaxaot100m", "-Xshareclasses:cacheDir=/opt/shareclasses", "-Dcns.quarkus.oidc.auth-server-url=${QUARKUS_OIDC_AUTH_SERVER_URL}", "-jar", "/deployments/quarkus-run.jar"]
+# Code Engine
+EXPOSE 8080
+CMD ["java", "-Xmx128m", "-XX:+IdleTuningGcOnIdle", "-Xtune:virtualized", "-Xscmx128m", "-Xscmaxaot100m", "-Xshareclasses:cacheDir=/opt/shareclasses", "-Dcns.appid.auth-server-url_tenant_A=${APPID_AUTH_SERVER_URL_TENANT_A}", "-Dcns.appid.client_id_tenant_A=${APPID_CLIENT_ID_TENANT_A}", "-jar", "/deployments/quarkus-run.jar"]

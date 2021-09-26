@@ -240,7 +240,7 @@ function deployWebAPI(){
                                 --env CNS_ARTICLES_URL="http://articles.$NAMESPACE.svc.cluster.local/articles" \
                                 --max-scale 1 \
                                 --min-scale 1 \
-                                --port 8081 
+                                --port 8080 
 
     ibmcloud ce application get --name web-api
     WEBAPI_URL=$(ibmcloud ce application get --name web-api | grep "https://web-api." |  awk '/web-api/ {print $2}')

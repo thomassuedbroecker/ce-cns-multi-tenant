@@ -4,7 +4,7 @@ export info=$(pwd)
 
 echo "**********************************"
 echo "-> Log: Root path: '$info'"
-echo "-> Log: Check env variables: '$CNS_ARTICLES_URL', '$QUARKUS_OIDC_AUTH_SERVER_URL'"
+echo "-> Log: Check env variables: '$CNS_ARTICLES_URL_TENANT_A', '$APPID_AUTH_SERVER_URL_TENANT_A' '$APPID_CLIENT_ID_TENANT_A'"
 
 echo "**********************************"
 echo "Execute java command "
@@ -16,7 +16,8 @@ java -Xmx128m \
      -Xtune:virtualized \
      -Xscmx128m \
      -Xshareclasses:cacheDir=/opt/shareclasses \
-     -Dcns.articles-url=${CNS_ARTICLES_URL} \
-     -Dcns.quarkus.oidc.auth-server-url=${QUARKUS_OIDC_AUTH_SERVER_URL} \
+     -Dcns.cns.articles-url_tenant_A=${CNS_ARTICLES_URL_TENANT_A} \
+     -Dcns.appid.auth-server-url_tenant_A=${APPID_AUTH_SERVER_URL_TENANT_A} \
+     -Dcns.appid.client_id_tenant_A=${APPID_CLIENT_ID_TENANT_A} \
      -jar \
      /deployments/quarkus-run.jar
