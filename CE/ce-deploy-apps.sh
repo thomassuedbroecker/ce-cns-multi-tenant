@@ -191,6 +191,9 @@ configureAppIDInformation(){
     echo "Result import: $result"
     echo "-------------------------"
     echo ""
+}
+
+addRedirectURIAppIDInformation(){
 
     #****** Add redirect uris ******
     echo ""
@@ -368,13 +371,6 @@ echo "************************************"
 setupCLIenvCE
 
 echo "************************************"
-echo " web-app (to get the redirect URL for AppID)"
-echo "************************************"
-
-deployWebApp
-ibmcloud ce application events --application web-app
-
-echo "************************************"
 echo " AppID creation"
 echo "************************************"
 
@@ -401,11 +397,17 @@ deployWebAPI
 ibmcloud ce application events --application web-api
 
 echo "************************************"
-echo " update web-app wit the information from AppID "
+echo " web-app"
 echo "************************************"
 
-updateWebApp
+deployWebApp
 ibmcloud ce application events --application web-app
+
+echo "************************************"
+echo " AppID add redirect URI"
+echo "************************************"
+
+addRedirectURIAppIDInformation
 
 echo "************************************"
 echo " Verify deployments"
