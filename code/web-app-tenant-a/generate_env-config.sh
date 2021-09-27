@@ -6,7 +6,7 @@
 cat <<EOF
 // used as 'environment' variables
 window.VUE_APP_ROOT="${VUE_APP_ROOT}"
-window.VUE_APP_WEBAPI="${VUE_APP_WEPAPI}"
+window.VUE_APP_WEBAPI="${VUE_APP_WEBAPI}"
 // App ID related
 // Single WebPage
 window.VUE_APPID_CLIENT_ID="${VUE_APPID_CLIENT_ID}"
