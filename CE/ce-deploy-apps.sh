@@ -12,9 +12,9 @@ export RESOURCE_GROUP=default
 export REPOSITORY=tsuedbroecker
 export REGION="us-south"
 export NAMESPACE=""
-export WEBAPI_URL=""
-export WEBAPP_URL=""
-export ARTICEL_URL=""
+export WEBAPI_URL="http://localhost:8083"
+export WEBAPP_URL="http://localhost:8080"
+export ARTICEL_URL="http://articles.$NAMESPACE.svc.cluster.local/articlesA"
 export STATUS="Running"
 
 # Service
@@ -228,7 +228,7 @@ function deployArticles(){
 
 function deployWebAPI(){
 
-    echo "Articles URL: http://articles.$NAMESPACE.svc.cluster.local/articles"
+    echo "Articles URL: http://articles.$NAMESPACE.svc.cluster.local/articlesA"
     
     # Valid vCPU and memory combinations: https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo
     ibmcloud ce application create --name web-api \
@@ -237,7 +237,7 @@ function deployWebAPI(){
                                 --memory "2G" \
                                 --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
                                 --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
-                                --env CNS_ARTICLES_URL_TENANT_A="http://articles.$NAMESPACE.svc.cluster.local/articles" \
+                                --env CNS_ARTICLES_URL_TENANT_A="http://articles.$NAMESPACE.svc.cluster.local/articlesA" \
                                 --max-scale 1 \
                                 --min-scale 1 \
                                 --port 8080 
@@ -256,7 +256,7 @@ function deployWebApp(){
                                    --cpu "1" \
                                    --memory "2G" \
                                    --env VUE_APP_ROOT="/" \
-                                   --env VUE_APP_WEBAPI="$WEBAPI_URL/articles" \
+                                   --env VUE_APP_WEBAPI="$WEBAPI_URL/articlesA" \
                                    --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
                                    --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
                                    --max-scale 1 \
@@ -274,7 +274,7 @@ function updateWebApp(){
 
     ibmcloud ce application update --name web-app \
                                    --env VUE_APP_ROOT="/" \
-                                   --env VUE_APP_WEBAPI="$WEBAPI_URL/articles" \
+                                   --env VUE_APP_WEBAPI="$WEBAPI_URL/articlesA" \
                                    --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
                                    --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
 

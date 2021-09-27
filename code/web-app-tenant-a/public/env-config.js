@@ -1,7 +1,7 @@
 // used as 'environment' variables, 
 // window.VUE_APP_ROOT="/cns/"
 window.VUE_APP_ROOT="/" // local
-window.VUE_APP_WEPAPI="http://localhost:8083"
+window.VUE_APP_WEBAPI="http://localhost:8083"
 // App ID related
 // Single WebPage
 window.VUE_APPID_CLIENT_ID='100924f6-bcf1-4bc7-a3bc-d00d2aa681ac'
