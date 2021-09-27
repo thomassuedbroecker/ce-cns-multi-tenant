@@ -17,8 +17,8 @@ java -Xmx128m \
      -Xscmx128m \
      -Xshareclasses:cacheDir=/opt/shareclasses \
      -Dquarkus.oidc.auth-server-url=${APPID_AUTH_SERVER_URL_TENANT_A}
-     -Dcns.cns.articles-url_tenant_A=${CNS_ARTICLES_URL_TENANT_A} \
-     -Dcns.appid.auth-server-url_tenant_A=${APPID_AUTH_SERVER_URL_TENANT_A} \
-     -Dcns.appid.client_id_tenant_A=${APPID_CLIENT_ID_TENANT_A} \
+     -Dcns.articles-url_tenant_A=${CNS_ARTICLES_URL_TENANT_A} \
+     -Dappid.auth-server-url_tenant_A=${APPID_AUTH_SERVER_URL_TENANT_A} \
+     -Dappid.client_id_tenant_A=${APPID_CLIENT_ID_TENANT_A} \
      -jar \
      /deployments/quarkus-run.jar
