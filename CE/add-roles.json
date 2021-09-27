@@ -3,7 +3,7 @@
   "description": "This is an example role.",
   "access": [
     {
-      "application_id": "bf8c0866-edc3-49f1-b5e9-ee24f54e8f69",
+      "application_id": "7b279a26-7a5c-4cfd-885b-ddd681ba8a49",
       "scopes": [
         "cns_example_scope"
       ]

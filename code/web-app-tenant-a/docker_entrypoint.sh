@@ -9,7 +9,8 @@ echo "*********************"
 echo "    Navigation"
 echo "*********************"
 whoami
-nginx stop
+id -g -n $whoami
+nginx -s stop
 pwd
 ls
 cd /code
@@ -30,20 +31,20 @@ echo ""
 echo "*********************"
 echo "Get ip address"
 echo "*********************"
-ip addr show
-echo ""
-echo ""
+#echo ""
+#ip addr show
+ip a
 echo "*********************"
 echo "Create ./code/env-config.js"
 echo "*******Exists?*********"
 cd code
 ls
-echo "*******Delete********"
+echo "*******Delete 'env-config.js'********"
 rm env-config.js
-echo "*******Deleted?********"
+echo "*******Deleted 'env-config.js'?********"
 ls
 "/bin/sh" ../generate_env-config.sh > ./env-config.js
-echo "*******Generated?******"
+echo "*******Generated 'env-config.js'?******"
 ls
 ########################################
 # Create env-config.js file in the public folder 
@@ -70,4 +71,5 @@ echo ""
 echo "*********************"
 echo "Start server"
 echo "*********************"
+nginx -t
 nginx

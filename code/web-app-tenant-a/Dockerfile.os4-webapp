@@ -17,18 +17,11 @@ RUN yarn build
 # https://blog.openshift.com/deploy-vuejs-applications-on-openshift/
 FROM docker.io/nginx:1.20.0-alpine
 
-# install openssl
-# RUN apk add --update openssl && \
-#    rm -rf /var/cache/apk/*
 RUN apk add --update coreutils
 
 # Add a user how will have the rights to change the files in code
 RUN addgroup -g 1500 nginxusers 
-# Using https://unix4lyfe.org/crypt/ to encrypt password "TEST"
 RUN adduser --disabled-password -u 1501 nginxuser nginxusers 
-# RUN adduser -p $(openssl passwd -crypt "TEST") nginxuser nginxusers 
-# RUN usermod --password "$1$ysvQHHKj$fydFGu/hdRSNHVQqhvU450" nginxuser 
-
 
 # Configure ngnix server
 COPY nginx-os4-webapp.conf /etc/nginx/nginx.conf
@@ -52,5 +45,5 @@ RUN chmod 777 /etc/nginx
 
 USER nginxuser
 
-EXPOSE 8080:8081
+EXPOSE 8080:8080
 CMD ["/bin/sh","docker_entrypoint.sh"]
