@@ -55,7 +55,7 @@ The files do contain following format.
 }
 ```
 
-Enable Cloud Directory as identity provider.
+Format to enable Cloud Directory as identity provider.
 
 ```json
 {
@@ -85,6 +85,8 @@ Enable Cloud Directory as identity provider.
 result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications)
 ```
 
+Format to upload an application
+
 ```json
 {
     "name": "cns-ce-example",
@@ -97,6 +99,8 @@ result=$(curl -d @./$ADD_APPLICATION -H "Content-Type: application/json" -H "Aut
 ```sh
 result=$(curl -d @./$ADD_SCOPE -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/applications/$APPLICATION_CLIENTID/scopes)
 ``` 
+
+Format to upload the scope.
 
 ```json
 {
@@ -115,6 +119,8 @@ OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
 #echo $OAUTHTOKEN
 result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/roles)
 ``` 
+
+Format to upload a role.
 
 ```json
 {
