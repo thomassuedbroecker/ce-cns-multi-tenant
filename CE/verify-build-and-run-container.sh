@@ -17,12 +17,13 @@ echo "************************************"
 cd ..
 pwd
 cd code/web-app-tenant-a
-eval $(minikube -p minikube docker-env)
+#eval $(minikube -p minikube docker-env)
 podman image list
 #docker image list
 podman container list
 #docker container list
 #podman image prune -a -f
+
 
 podman build -t "web-app-local-verification:v1" -f Dockerfile.os4-webapp .
 #docker build -t "web-app-local-verification:v1" -f Dockerfile.os4-webapp .
@@ -36,8 +37,10 @@ podman run --name="web-app-verification" \
            -e VUE_APP_WEBAPI="$WEBAPI_URL/articlesA" \
            -e VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
            -e VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
-           -p 8080:8080 \
+           -p 8080:8080/tcp \
            "web-app-local-verification:v1"
+
+podman port --all  
 
 #docker run --name="web-app-verification" \
 #           -it \

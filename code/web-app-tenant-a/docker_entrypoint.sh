@@ -10,21 +10,31 @@ echo "    Navigation"
 echo "*********************"
 whoami
 id -g -n $whoami
+
+nginx -V
 nginx -s stop
+
 pwd
 ls
 cd /code
 ls
 cd ..
 more ./generate_env-config.sh
-
+echo ""
+echo ""
+echo "*********************"
+echo "Verify nginx"
+echo "*********************"
+nginx -V
 ########################################
 # Create env-config.js file in the public folder 
 # of the ngnix server, based on the environment variables
 # given by the docker run -e parameter
-# - VUE_APP_ROOT
-# - VUE_APP_KEYCLOAK
-# - VUR_APP_WEBAPI
+#
+# - VUE_APP_ROOT="${VUE_APP_ROOT}"
+# - VUE_APP_WEBAPI="${VUE_APP_WEBAPI}"
+# - VUE_APPID_CLIENT_ID="${VUE_APPID_CLIENT_ID}"
+# - VUE_APPID_DISCOVERYENDPOINT="${VUE_APPID_DISCOVERYENDPOINT}"
 ########################################
 echo ""
 echo ""
