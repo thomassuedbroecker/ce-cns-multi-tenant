@@ -17,7 +17,7 @@ export WEBAPP_URL="http://localhost:8080"
 export ARTICEL_URL="http://articles.$NAMESPACE.svc.cluster.local/articlesA"
 export STATUS="Running"
 
-# Service
+# AppID Service
 export SERVICE_PLAN="graduated-tier"
 export APPID_SERVICE_NAME="appid"
 #export YOUR_SERVICE_FOR_APPID="appID-multi-tenancy-example-tsuedbro"

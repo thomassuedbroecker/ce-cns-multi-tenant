@@ -23,9 +23,13 @@ podman image list
 podman container list
 #docker container list
 #podman image prune -a -f
+podman container stop -f  "web-app-verification"
+podman container rm -f "web-app-verification"
+podman image rm -f "localhost/web-app-local-verification:v1"
 
 
-podman build -t "web-app-local-verification:v1" -f Dockerfile.os4-webapp .
+podman build -t "web-app-local-verification:v1" -f Dockerfile.appache .
+#podman build -t "web-app-local-verification:v1" -f Dockerfile.os4-webapp .
 #docker build -t "web-app-local-verification:v1" -f Dockerfile.os4-webapp .
 pwd
 

@@ -1,0 +1,34 @@
+##############################
+#           BUILD
+##############################
+FROM docker.io/node:12-alpine as BUILD
+
+COPY src /usr/src/app/src
+COPY public /usr/src/app/public
+COPY package.json /usr/src/app/
+COPY babel.config.js /usr/src/app/
+WORKDIR /usr/src/app/
+RUN yarn install
+RUN yarn build
+
+##############################
+#           PRODUCTION
+##############################
+FROM docker.io/httpd:2.4
+
+WORKDIR /usr/local/apache2/htdocs/
+COPY --from=BUILD /usr/src/app/dist .
+RUN ls
+#COPY ./public-html/ /usr/local/apache2/htdocs/
+WORKDIR /usr/local/apache2
+RUN ls
+WORKDIR /usr/local/apache2/conf
+RUN ls
+RUN more httpd.conf
+COPY httpd.conf .
+
+WORKDIR /usr/local/apache2/conf/extra/
+RUN ls
+RUN more httpd-vhosts.conf
+
+EXPOSE 8080
