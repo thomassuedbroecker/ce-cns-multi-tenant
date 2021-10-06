@@ -1,42 +1,119 @@
-# Automated setup of AppID
+# Automated setup of IBM Cloud App ID using a bash script
 
-These are the implementation details of the bash script to setup the AppID service.
-We utilies following API and ClI in the scipt:
+These are some of the implementation details of an example bash script to automate the setup for an [IBM Cloud App ID](https://www.ibm.com/cloud/app-id) service instance.
+
+> _"IBM Cloud App ID allows you to easily add authentication to web and mobile apps. You no longer have to worry about setting up infrastructure for identity, ensuring geo-availability, and confirming compliance regulations. Instead, you can enhance your apps with advanced security capabilities like multifactor authentication and single sign-on."_ Resouce from the [IBM Cloud App ID](https://www.ibm.com/cloud/app-id) webpage (2021/10/06)
+
+The bash script utilies following APIs and ClIs:
+
 * [AppID swagger API documentation](https://us-south.appid.cloud.ibm.com/swagger-ui/#/).
 * [IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cli-getting-started)
 
-The script creates one instance of the AppID service and does the configuration.
+The script creates one instance of the [IBM Cloud App ID](https://www.ibm.com/cloud/app-id) service and does the configuration.
 
-### 1. Create AppID service
+The example setup uses the IBM Cloud Shell and a `PayAsYouGo` IBM Cloud Account, but for the App ID service instance we will use the lite plan which is for free. 
 
-This section used the IBM Cloud CLI.
+> Please take about the offical documentation for each IBM Cloud Services and IBM Cloud Account Type definitions, before you start.
 
-#### a. Login to the IBM Cloud CLI
+Simplified steps:
+
+1. Create a `PayAsYouGo` IBM Cloud Account
+2. Open the IBM Cloud shell
+3. Clone the github project
+4. Execute one bash script
+5. Verify the newly created App ID service instance in IBM Cloud
+
+     * application
+     * scope 
+     * roles
+     * users
+     * login headline
+     * logo
+     * color
+
+### Here are the steps you can follow to execute the example bash script
+
+#### Step 1: Create a `PayAsYouGo` IBM Cloud Account
+
+Open this [link](https://ibm.biz/BdfXAn) and follow the guided steps.
+
+#### Step 2: Open the `IBM Cloud Shell`
+
+When using the IBM Cloud Shell, no client-side setup is required for this workshop, it comes with all necessary CLIs (command line tools).
+
+Use following link to directly open the `IBM Cloud Shell`.
+
+<https://cloud.ibm.com/shell>
+
+In your browser, login to the [IBM Cloud](https://cloud.ibm.com) Dashboard and open the IBM Cloud Shell from here:
+
+![](images/cns-ce-cloud-shell-01.png)
+
+_Note:_ Your workspace includes 500 MB of temporary storage. This session will close after an hour of inactivity. If you don't have any active sessions for an hour or you reach the 50-hour weekly usage limit, your workspace data is removed.
+
+#### Step 2: Verify the open `IBM Cloud Shell`
+
+Now you are logged on with your IBM Cloud account.
+
+![](images/cns-ce-cloud-shell-02.png)
+
+#### Step 3: Clone the github project into the `IBM Cloud Shell`
 
 ```sh
-ibmcloud login
+git clone https://github.com/thomassuedbroecker/automated-setup-of-ibmcloud-appid
 ```
 
-#### b. Set the region and resource group
+#### Step 4: Navigate to the project directory
+
+```sh
+cd automated-setup-of-ibmcloud-appid/scripts
+```
+
+#### Step 5: Execute the bash script `setup-appid.sh`
+
+```sh
+bash setup-appid.sh
+```
+
+#### Step 6: Verify the created App ID service instance
+
+
+### What happens behind the curtain?
+
+Here is some background information what the script does.
+The [Bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) script uses [`cURL`](https://en.wikipedia.org/wiki/CURL), [sed](https://en.wikipedia.org/wiki/Sed) and [grep](https://en.wikipedia.org/wiki/Grep) commands and the * [AppID REST API](https://us-south.appid.cloud.ibm.com/swagger-ui/#/). The steps do contain also an example content for the [JSON](https://en.wikipedia.org/wiki/JSON) [payload](https://en.wikipedia.org/wiki/Payload) which will be upload. In the GitHub project you will file the JSON files I prepared for that example.
+
+* Application name: `myexamplefrontend`
+* Role name: `tenant_user_access`
+* Scope name: `tenant_scope`
+* 
+
+#### Step 1: It configures `region` and `resource group`
+
+For that task it uses the IBM Cloud CLI.
 
 ```sh
 ibmcloud target -g $RESOURCE_GROUP
 ibmcloud target -r $REGION
 ```
 
-#### c. Create service instance
+#### Step 2: It creates a service instance
+
+For that task it uses the IBM Cloud CLI using `ibmcloud resource service-instance-create`.
 
 ```sh
 ibmcloud resource service-instance-create $YOUR_SERVICE_FOR_APPID $APPID_SERVICE_NAME $SERVICE_PLAN $REGION
 ```
 
-#### d. Create a service key for the AppID service
+#### Step 3: Then it creates a service key for the AppID service
+
+The service key contains needed configuration and access information we need to configure the service.
 
 ```sh
 ibmcloud resource service-key-create $APPID_SERVICE_KEY_NAME $APPID_SERVICE_KEY_ROLE --instance-name $YOUR_SERVICE_FOR_APPID
 ```
 
-### 2. Configure AppID service
+#### Step 5: Configure AppID service
 
 #### a. Set identity providers
 
