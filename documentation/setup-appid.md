@@ -15,11 +15,11 @@ The example setup uses the IBM Cloud Shell and a `PayAsYouGo` IBM Cloud Account,
 
 > Please take about the offical documentation for each IBM Cloud Services and IBM Cloud Account Type definitions, before you start.
 
-Simplified steps:
+### Simplified overview of steps to setup an example using the bash script:
 
 1. Create a `PayAsYouGo` IBM Cloud Account
 2. Open the IBM Cloud shell
-3. Clone the github project
+3. Clone the [GitHub project](https://github.com/thomassuedbroecker/automated-setup-of-ibmcloud-appid.git)
 4. Execute one bash script
 5. Verify the newly created App ID service instance in IBM Cloud
 
@@ -113,7 +113,7 @@ The service key contains needed configuration and access information we need to 
 ibmcloud resource service-key-create $APPID_SERVICE_KEY_NAME $APPID_SERVICE_KEY_ROLE --instance-name $YOUR_SERVICE_FOR_APPID
 ```
 
-#### Step 5: Configure AppID service
+#### Step 4: Configuration of identity providers, application, scope, role and import existing users and more
 
 #### a. Set identity providers
 
