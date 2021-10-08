@@ -11,9 +11,9 @@ echo " web-app"
 echo "************************************"
 cd $ROOT_PATH/code/web-app-tenant-a
 docker login quay.io
-docker build -t "quay.io/$REPOSITORY/web-app-ce-appid:v2" -f Dockerfile.nginx .
-docker push "quay.io/$REPOSITORY/web-app-ce-appid:v2"
-
+docker build -t "quay.io/$REPOSITORY/web-app-ce-appid:v3" -f Dockerfile.nginx .
+docker push "quay.io/$REPOSITORY/web-app-ce-appid:v3"
+ 
 echo ""
 
 echo "************************************"
@@ -21,8 +21,8 @@ echo " articles"
 echo "************************************"
 cd $ROOT_PATH/code/articles-data-tenant
 docker login quay.io
-docker build -t "quay.io/$REPOSITORY/articles-ce-appid:v2" -f Dockerfile .
-docker push "quay.io/$REPOSITORY/articles-ce-appid:v2"
+docker build -t "quay.io/$REPOSITORY/articles-ce-appid:v3" -f Dockerfile .
+docker push "quay.io/$REPOSITORY/articles-ce-appid:v3"
 
 echo ""
 
@@ -32,5 +32,5 @@ echo "************************************"
 
 cd $ROOT_PATH/code/web-api-tenant
 docker login quay.io
-docker build -t "quay.io/$REPOSITORY/web-api-ce-appid:v2" -f Dockerfile .
-docker push "quay.io/$REPOSITORY/web-api-ce-appid:v2"
+docker build -t "quay.io/$REPOSITORY/web-api-ce-appid:v3" -f Dockerfile .
+docker push "quay.io/$REPOSITORY/web-api-ce-appid:v3"

@@ -22,9 +22,9 @@ export ARTICEL_URL="http://articles.$NAMESPACE.svc.cluster.local/articlesA"
 
 # Application Images
 
-export WEBAPP_IMAGE="quay.io/$REPOSITORY/web-app-ce-appid:v2"
-export WEBAPI_IMAGE="quay.io/$REPOSITORY/web-api-ce-appid:v2"
-export ARTICLES_IMAGE="quay.io/$REPOSITORY/articles-ce-appid:v2"
+export WEBAPP_IMAGE="quay.io/$REPOSITORY/web-app-ce-appid:v3"
+export WEBAPI_IMAGE="quay.io/$REPOSITORY/web-api-ce-appid:v3"
+export ARTICLES_IMAGE="quay.io/$REPOSITORY/articles-ce-appid:v3"
 
 # AppID Service
 export SERVICE_PLAN="graduated-tier"
@@ -242,7 +242,7 @@ function deployArticles(){
 
 function deployWebAPI(){
 
-    echo "Articles URL: http://articles.$NAMESPACE.svc.cluster.local/articlesA"
+    echo "Needed Articles URL: http://articles.$NAMESPACE.svc.cluster.local/articlesA"
     
     # Valid vCPU and memory combinations: https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo
     ibmcloud ce application create --name web-api \
@@ -282,21 +282,6 @@ function deployWebApp(){
     echo "Set WEBAPP URL: $WEBAPP_URL"
 
     # checkKubernetesPod "web-app"
-}
-
-function updateWebApp(){
-
-    ibmcloud ce application update --name web-app \
-                                   --env VUE_APP_ROOT="/" \
-                                   --env VUE_APP_WEBAPI="$WEBAPI_URL/articlesA" \
-                                   --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
-                                   --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
-
-    ibmcloud ce application get --name web-app
-    WEBAPP_URL=$(ibmcloud ce application get --name web-app | grep "https://web-app." |  awk '/web-app/ {print $2}')
-    echo "Set WEBAPP URL: $WEBAPP_URL"
-    
-    # checkKubernetesPod "web-app-00002"
 }
 
 # **** Kubernetes CLI ****
