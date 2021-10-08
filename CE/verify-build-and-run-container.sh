@@ -17,52 +17,27 @@ echo "************************************"
 cd ..
 pwd
 cd code/web-app-tenant-a
-#eval $(minikube -p minikube docker-env)
-podman image list
-#docker image list
-podman container list
-#docker container list
+docker image list
+docker container list
 #podman image prune -a -f
-podman container stop -f  "web-app-verification"
-podman container rm -f "web-app-verification"
-podman image rm -f "localhost/web-app-local-verification:v1"
+docker container stop -f  "web-app-verification"
+docker container rm -f "web-app-verification"
+docker image rm -f "localhost/web-app-local-verification:v1"
 
 
-podman build -t "web-app-local-verification:v1" -f Dockerfile.appache .
-#podman build -t "web-app-local-verification:v1" -f Dockerfile.os4-webapp .
-#docker build -t "web-app-local-verification:v1" -f Dockerfile.os4-webapp .
+docker build -t "localhost/web-app-local-verification:v1" -f Dockerfile.nginx .
 pwd
 
-podman container list
-podman logs web-app-verification
-podman run --name="web-app-verification" \
+docker container list
+
+docker run --name="web-app-verification" \
            -it \
            -e VUE_APP_ROOT="/" \
            -e VUE_APP_WEBAPI="$WEBAPI_URL/articlesA" \
            -e VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
            -e VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
-           -p 8080:8080/tcp \
-           "web-app-local-verification:v1"
+           -p 8080:8080 \
+           "localhost/web-app-local-verification:v1"
 
-podman port --all  
-
-#docker run --name="web-app-verification" \
-#           -it \
-#           -e VUE_APP_ROOT="/" \
-#           -e VUE_APP_WEBAPI="$WEBAPI_URL/articlesA" \
-#           -e VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
-#           -e VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
-#           -p 8080:8080 \
-#           "web-app-local-verification:v1"
-
-
-#podman run --name="web-app-verification" \
-#           -d \
-#           -e VUE_APP_ROOT="/" \
-#           -e VUE_APP_WEBAPI="$WEBAPI_URL/articlesA" \
-#           -e VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
-#           -e VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
-#           -p 8080:8080 \
-#           "web-app-local-verification:v1"
-
-#podman  attach web-app-verification
+docker logs web-app-verification
+docker port --all  

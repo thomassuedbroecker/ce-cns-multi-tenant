@@ -1,28 +1,28 @@
 # Project information
-site_name: Workshop "Getting started with multi tenancy"
+site_name: Workshop "Getting started implement an example microservices based application using IBM Cloud App ID and Code Engine"
 site_url: https://thomassuedbroecker.github.io/ce-cns-multi-tenant/
 site_author: Thomas Suedbroecker
 
 # Repository
-repo_name: Multi Tenancy - Cloud-Native-Starter
+repo_name: App ID and the Cloud-Native-Starter security example
 repo_url: https://github.com/thomassuedbroecker/ce-cns-multi-tenant.git
 edit_uri: edit/master/documentation
 docs_dir: documentation
 
 # Navigation
 nav:
-  - App ID discovery frontend : details-appid-fronted-vuejs.md
-  - Compare App ID and Keycloak : compare-appid-keycloak.md
   - Introduction:
     - Overview: ./README.md
+  - Labs: 
+    - 1. Run example locally: ./run-example-local.md
+  - Optional Labs: 
+    - 1. TBD: ./optional-lab-tbd.md
   - Implementation details:
     - Vue.js extract domain from email: details-email-domain.md 
     - Quakus extract tenant and reconfigure OIDC configuration: details-quarkus-extract-tenant.md
     - Setup AppID service: setup-appid.md
-  - Labs: 
-    - 1. TBD: ./lab-tbd.md
-  - Optional Labs: 
-    - 1. TBD: ./optional-lab-tbd.md
+    - App ID discovery frontend : details-appid-fronted-vuejs.md
+    - Compare App ID and Keycloak : compare-appid-keycloak.md
   - Additional Resources:
     - Cloud Native Starter example:
        - Cloud-Native-Starter project: https://github.com/IBM/cloud-native-starter

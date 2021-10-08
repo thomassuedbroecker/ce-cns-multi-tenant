@@ -12,28 +12,37 @@ export RESOURCE_GROUP=default
 export REPOSITORY=tsuedbroecker
 export REGION="us-south"
 export NAMESPACE=""
+export STATUS="Running"
+
+# Application URLs
 export WEBAPI_URL="http://localhost:8083"
 export WEBAPP_URL="http://localhost:8080"
 export ARTICEL_URL="http://articles.$NAMESPACE.svc.cluster.local/articlesA"
-export STATUS="Running"
+
+
+# Application Images
+
+export WEBAPP_IMAGE="quay.io/$REPOSITORY/web-app-ce-appid:v2"
+export WEBAPI_IMAGE="quay.io/$REPOSITORY/web-api-ce-appid:v2"
+export ARTICLES_IMAGE="quay.io/$REPOSITORY/articles-ce-appid:v2"
 
 # AppID Service
 export SERVICE_PLAN="graduated-tier"
 export APPID_SERVICE_NAME="appid"
 #export YOUR_SERVICE_FOR_APPID="appID-multi-tenancy-example-tsuedbro"
-export YOUR_SERVICE_FOR_APPID="multi-tenancy-AppID-automated-tsuedbro"
-export APPID_SERVICE_KEY_NAME="multi-tenancy-AppID-service-key"
+export YOUR_SERVICE_FOR_APPID="cns-example-AppID-automated-tsuedbro"
+export APPID_SERVICE_KEY_NAME="cns-example-AppID-automated-tsuedbro-service-key"
 export APPID_SERVICE_KEY_ROLE="Manager"
 export TENANTID=""
 export MANAGEMENTURL=""
 export APPLICATION_DISCOVERYENDPOINT=""
 
-# User
+# App ID User
 export USER_IMPORT_FILE="user-import.json"
 export USER_EXPORT_FILE="user-export.json"
 export ENCRYPTION_SECRET="12345678"
 
-# Application
+# App ID Application
 export ADD_APPLICATION="add-application.json"
 export ADD_SCOPE="add-scope.json"
 export ADD_ROLE="add-roles.json"
@@ -215,13 +224,13 @@ addRedirectURIAppIDInformation(){
 
 function deployArticles(){
 
-    ibmcloud ce application create --name articles --image "quay.io/$REPOSITORY/articles-ce-appid:v1" \
+    ibmcloud ce application create --name articles --image "$ARTICLES_IMAGE" \
                                    --cpu "1" \
                                    --memory "2G" \
                                    --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
                                    --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
                                    --max-scale 1 \
-                                   --min-scale 1 \
+                                   --min-scale 0 \
                                    --cluster-local                                        
     
     ibmcloud ce application get --name articles
@@ -235,14 +244,14 @@ function deployWebAPI(){
     
     # Valid vCPU and memory combinations: https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo
     ibmcloud ce application create --name web-api \
-                                --image "quay.io/$REPOSITORY/web-api-ce-appid:v1" \
+                                --image "$WEBAPI_IMAGE" \
                                 --cpu "1" \
                                 --memory "2G" \
                                 --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
                                 --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
                                 --env CNS_ARTICLES_URL_TENANT_A="http://articles.$NAMESPACE.svc.cluster.local/articlesA" \
                                 --max-scale 1 \
-                                --min-scale 1 \
+                                --min-scale 0 \
                                 --port 8080 
 
     ibmcloud ce application get --name web-api
@@ -263,7 +272,7 @@ function deployWebApp(){
                                    --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
                                    --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
                                    --max-scale 1 \
-                                   --min-scale 1 \
+                                   --min-scale 0 \
                                    --port 8080 
 
     ibmcloud ce application get --name web-app
