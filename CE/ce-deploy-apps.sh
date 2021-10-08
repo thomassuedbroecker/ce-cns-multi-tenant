@@ -38,15 +38,15 @@ export MANAGEMENTURL=""
 export APPLICATION_DISCOVERYENDPOINT=""
 
 # App ID User
-export USER_IMPORT_FILE="user-import.json"
-export USER_EXPORT_FILE="user-export.json"
+export USER_IMPORT_FILE="appid-configs/user-import.json"
+export USER_EXPORT_FILE="appid-configs/user-export.json"
 export ENCRYPTION_SECRET="12345678"
 
 # App ID Application
-export ADD_APPLICATION="add-application.json"
-export ADD_SCOPE="add-scope.json"
-export ADD_ROLE="add-roles.json"
-export ADD_REDIRECT_URIS="add-redirecturis.json"
+export ADD_APPLICATION="appid-configs/add-application.json"
+export ADD_SCOPE="appid-configs/add-scope.json"
+export ADD_ROLE="appid-configs/add-roles.json"
+export ADD_REDIRECT_URIS="appid-configs/add-redirecturis.json"
 export APPLICATION_CLIENTID=""
 export APPLICATION_TENANTID=""
 export APPLICATION_OAUTHSERVERURL=""
@@ -114,28 +114,28 @@ configureAppIDInformation(){
     echo "-------------------------"
     echo ""
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
-    result=$(curl -d @./idps-custom.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/custom)
+    result=$(curl -d @./appid-configs/idps-custom.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/custom)
     echo ""
     echo "-------------------------"
     echo "Result custom: $result"
     echo "-------------------------"
     echo ""
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
-    result=$(curl -d @./idps-facebook.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/facebook)
+    result=$(curl -d @./appid-configs/idps-facebook.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/facebook)
     echo ""
     echo "-------------------------"
     echo "Result facebook: $result"
     echo "-------------------------"
     echo ""
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
-    result=$(curl -d @./idps-google.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/google)
+    result=$(curl -d @./appid-configs/idps-google.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/google)
     echo ""
     echo "-------------------------"
     echo "Result google: $result"
     echo "-------------------------"
     echo ""
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
-    result=$(curl -d @./idps-clouddirectory.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/cloud_directory)
+    result=$(curl -d @./appid-configs/idps-clouddirectory.json -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/idps/cloud_directory)
     echo ""
     echo "-------------------------"
     echo "Result cloud directory: $result"
@@ -179,7 +179,7 @@ configureAppIDInformation(){
     echo " Add role"
     echo "-------------------------"
     #Create file from template
-    sed "s+APPLICATIONID+$APPLICATION_CLIENTID+g" ./add-roles-template.json > ./$ADD_ROLE
+    sed "s+APPLICATIONID+$APPLICATION_CLIENTID+g" ./appid-configs/add-roles-template.json > ./$ADD_ROLE
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     #echo $OAUTHTOKEN
     result=$(curl -d @./$ADD_ROLE -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/roles)
@@ -187,6 +187,7 @@ configureAppIDInformation(){
     echo "Result role: $result"
     echo "-------------------------"
     echo ""
+    rm -f ./$ADD_ROLE
  
     #****** Import cloud directory users ******
     echo ""
@@ -218,6 +219,7 @@ addRedirectURIAppIDInformation(){
     echo "Result redirect uris: $result"
     echo "-------------------------"
     echo ""
+    rm -f ./$ADD_REDIRECT_URIS
 }
 
 # **** application and microservices ****
@@ -264,7 +266,7 @@ function deployWebAPI(){
 function deployWebApp(){
 
     ibmcloud ce application create --name web-app \
-                                   --image "quay.io/$REPOSITORY/web-app-ce-appid:v1" \
+                                   --image "$WEBAPI_IMAGE" \
                                    --cpu "1" \
                                    --memory "2G" \
                                    --env VUE_APP_ROOT="/" \
