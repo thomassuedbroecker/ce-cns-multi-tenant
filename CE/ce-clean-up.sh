@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # **************** Global variables
+# Code Engine
+export PROJECT_NAME=cloud-native-starter-ce-workshop
+#export PROJECT_NAME=$MYPROJECT
+
 # CE applications
 export WEBAPI=web-api
 export WEBAPP=web-app
 export ARTICELS=articles
-
-# Code Engine
-export PROJECT_NAME=cloud-native-starter-ce-workshop
 
 # App ID
 export APPID_INSTANCE_NAME=cns-example-AppID-automated-tsuedbro
