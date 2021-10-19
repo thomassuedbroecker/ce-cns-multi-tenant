@@ -33,9 +33,9 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
         if ("articlesA".equals(parts[1])) {
             OidcTenantConfig config = new OidcTenantConfig();
 
-            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + config.getToken().getIssuer().toString());
-            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + auth_server_url_tenant_A);
-            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: " + client_id_tenant_A);
+            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: Issuer = " + config.getToken().getIssuer().toString());
+            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: auth_server_url = " + auth_server_url_tenant_A);
+            System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve A: client_id = " + client_id_tenant_A);
 
             config.setTenantId("tenantA");
             config.setAuthServerUrl(auth_server_url_tenant_A);

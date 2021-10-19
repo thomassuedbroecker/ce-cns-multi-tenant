@@ -1,6 +1,7 @@
 <template>
   <div class="home" v-if="isAuthenticated == true">
     <h4 style="margin-top:30px;margin-bottom:30px">Articles</h4>
+    <b-button v-on:click="onReloadArticles" variant="light">Reload articles</b-button>
     <div>
       <div class="articlesTable" style="line-height: 30px;">
         <div class="articlesRow">
@@ -67,6 +68,9 @@ export default {
     };
   },
   methods: {
+    onReloadArticles () {
+      this.readArticles();
+    },
     readArticles() {
       console.log("--> log webApiUrl: ", this.webApiUrl);
       this.loading = true;

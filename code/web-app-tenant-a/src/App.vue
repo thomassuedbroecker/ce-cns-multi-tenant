@@ -6,7 +6,7 @@
       variant="info"
       style="background-color: #1675fd !important;"
     >
-      <b-navbar-brand>Cloud Native Starter (Tenant A)</b-navbar-brand>
+      <b-navbar-brand>Cloud Native Starter with App ID</b-navbar-brand>
 
       <b-navbar-nav class="ml-auto">
         <b-navbar-nav v-if="isAuthenticated == false">

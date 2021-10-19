@@ -255,8 +255,8 @@ configureAppIDInformation(){
     echo ""
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     echo "POST url: $MANAGEMENTURL/config/ui/media?mediaType=logo"
-    #result=$(curl -F "file=@./$ADD_IMAGE" -H "Content-Type: multipart/form-data" -X POST -v -H "Authorization: Bearer $OAUTHTOKEN" "$MANAGEMENTURL/config/ui/mediamedia?mediaType=logo")
-    result=$(curl -F "file=@./$ADD_IMAGE" -H "Content-Type: multipart/form-data" -X POST -H "Authorization: Bearer $OAUTHTOKEN" "$MANAGEMENTURL/config/ui/mediamedia?mediaType=logo")
+    #result=$(curl -F "file=@./$ADD_IMAGE" -H "Content-Type: multipart/form-data" -X POST -v -H "Authorization: Bearer $OAUTHTOKEN" "$MANAGEMENTURL/config/ui/media?mediaType=logo")
+    result=$(curl -F "file=@./$ADD_IMAGE" -H "Content-Type: multipart/form-data" -X POST -H "Authorization: Bearer $OAUTHTOKEN" "$MANAGEMENTURL/config/ui/media?mediaType=logo")
     echo "-------------------------"
     echo "Result import: $result"
     echo "-------------------------"
@@ -279,7 +279,7 @@ addRedirectURIAppIDInformation(){
     echo "Result redirect uris: $result"
     echo "-------------------------"
     echo ""
-    # rm -f ./$ADD_REDIRECT_URIS
+    rm -f ./$ADD_REDIRECT_URIS
 }
 
 # **** application and microservices ****

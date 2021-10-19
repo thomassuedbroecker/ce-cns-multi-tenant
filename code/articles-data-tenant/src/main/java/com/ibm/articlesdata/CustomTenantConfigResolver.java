@@ -20,7 +20,7 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
    
     @Override
     public OidcTenantConfig resolve(RoutingContext context) {
-        System.out.println("-->log: com.ibm.web-api.CustomTenantResolver.resolve : " + context.request().path());
+        System.out.println("-->log: com.ibm.articles.CustomTenantResolver.resolve : " + context.request().path());
         String path = context.request().path();
         String[] parts = path.split("/");
 
