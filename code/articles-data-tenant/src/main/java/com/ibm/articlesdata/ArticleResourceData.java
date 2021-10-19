@@ -79,7 +79,8 @@ public class ArticleResourceData {
         try {
             Object issuer = this.accessToken.getClaim("iss");
             System.out.println("-->log: com.ibm.articles.ArticlesResourceData.tenantJSONWebToken issuer: " + issuer.toString());
-
+            System.out.println("-->log: com.ibm.articles.ArticlesResourceData access token: " + this.accessToken.toString());
+  
             String[] parts = issuer.toString().split("/");
             System.out.println("-->log: com.ibm.articles.ArticlesResourceData.log part[5]: " + parts[5]);
 

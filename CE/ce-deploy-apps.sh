@@ -19,7 +19,7 @@ export STATUS="Running"
 #--------------------
 
 # Frontend
-export FRONTEND_NAME="Cloud Native Starter (Tenant A)"
+export FRONTEND_NAME="Cloud Native Starter with App ID"
 
 # Application Images
 export WEBAPP_IMAGE="quay.io/$REPOSITORY/web-app-ce-appid:v4"
@@ -294,11 +294,10 @@ function deployArticles(){
                                    --max-scale 1 \
                                    --min-scale 0 \
                                    --cluster-local                                        
-    ibmcloud ce application list
-    echo "Search: ($ARTICLES)"
+
     ibmcloud ce application get --name "$ARTICLES"
 
-    echo "ARTICLES URL: http://$ARTICLES.$NAMESPACE.svc.cluster.local/articles"
+    echo "ARTICLES URL: http://$ARTICLES.$NAMESPACE.svc.cluster.local/articlesA"
 }
 
 function deployWebAPI(){
@@ -307,17 +306,17 @@ function deployWebAPI(){
     
     # Valid vCPU and memory combinations: https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo
     ibmcloud ce application create --name "$WEBAPI" \
-                                --image "$WEBAPI_IMAGE" \
-                                --cpu "0.5" \
-                                --memory "1G" \
-                                --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
-                                --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
-                                --env CNS_ARTICLES_URL_TENANT_A="http://$ARTICLES.$NAMESPACE.svc.cluster.local/articlesA" \
-                                --max-scale 1 \
-                                --min-scale 0 \
-                                --port 8080 
-    ibmcloud ce application list
-    ibmcloud ce application get --name "$WEBAPI" --output json
+                                   --image "$WEBAPI_IMAGE" \
+                                   --cpu "0.5" \
+                                   --memory "1G" \
+                                   --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
+                                   --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
+                                   --env CNS_ARTICLES_URL_TENANT_A="http://$ARTICLES.$NAMESPACE.svc.cluster.local/articlesA" \
+                                   --max-scale 1 \
+                                   --min-scale 0 \
+                                   --port 8080 
+
+    ibmcloud ce application get --name "$WEBAPI"
     WEBAPI_URL=$(ibmcloud ce application get --name "$WEBAPI" -o url)
     echo "WEBAPI URL: $WEBAPI_URL"
 }
@@ -329,14 +328,13 @@ function deployWebApp(){
                                    --cpu 0.5 \
                                    --memory 1G \
                                    --env VUE_APP_ROOT="/" \
-                                   --env VUE_APP_WEBAPI="$WEBAPI_URL/articlesA" \
+                                   --env VUE_APP_WEBAPI="$WEBAPI_URL" \
                                    --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
                                    --env VUE_APPID_DISCOVERYENDPOINT="$APPLICATION_DISCOVERYENDPOINT" \
                                    --max-scale 1 \
                                    --min-scale 0 \
                                    --port 8080 
     
-    ibmcloud ce application list
     ibmcloud ce application get --name "$WEBAPP"
     WEBAPP_URL=$(ibmcloud ce application get --name "$WEBAPP" -o url)
     echo "WEBAPP URL: $WEBAPP_URL"
@@ -384,7 +382,6 @@ function getKubeContainerLogs(){
     WEBAPP_LOG=$(kubectl get pod -n $NAMESPACE | grep $FIND | awk '{print $1}')
     echo $WEBAPP_LOG
     kubectl logs $WEBAPP_LOG user-container
-
 }
 
 function checkKubernetesPod (){
@@ -480,6 +477,6 @@ echo " URLs"
 echo "************************************"
 echo " - oAuthServerUrl   : $APPLICATION_OAUTHSERVERURL"
 echo " - discoveryEndpoint: $APPLICATION_DISCOVERYENDPOINT"
-echo " - Web-API          : $WEBAPI_URL"
-echo " - Articles         : http://$ARTICLES.$NAMESPACE.svc.cluster.local/articles"
+echo " - Web-API          : $WEBAPI_URL/articlesA"
+echo " - Articles         : http://$ARTICLES.$NAMESPACE.svc.cluster.local/articlesA"
 echo " - Web-App          : $WEBAPP_URL"
