@@ -33,7 +33,7 @@ if (currentHostname.indexOf('localhost') > -1) {
   console.log("--> log option 1: appid_init", appid_init.appid_clientId , appid_init.appid_discoveryEndpoint);
 
   urls = {
-    api: window.VUE_APP_WEPAPI
+    api: window.VUE_APP_WEBAPI
   }
   store.commit("setAPI", urls);
   console.log("--> log: urls", urls.api);
@@ -47,10 +47,10 @@ if (currentHostname.indexOf('localhost') > -1) {
   console.log("--> log option 2: appid_init ", appid_init.appid_clientId , appid_init.appid_discoveryEndpoint);
 
   urls = {
-    api: window.VUE_APP_WEPAPI
+    api: window.VUE_APP_WEBAPI
   }
-  store.commit("setAPI", urls.api);
-  console.log("--> log: urls ", urls.api);
+  store.commit("setAPI", urls);
+  console.log("--> log: urls ", store.state.endpoints.api);
 }
 
 let initOptions = {

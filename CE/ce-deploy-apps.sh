@@ -296,7 +296,7 @@ function deployArticles(){
                                    --cluster-local                                        
     ibmcloud ce application list
     echo "Search: ($ARTICLES)"
-    ibmcloud ce application get --name "$ARTICLES"
+    ibmcloud ce application get --name "$ARTICLES" --output json
 
     echo "Set ARTICLES URL: http://$ARTICLES.$NAMESPACE.svc.cluster.local/articles"
 }
@@ -317,7 +317,7 @@ function deployWebAPI(){
                                 --min-scale 0 \
                                 --port 8080 
     ibmcloud ce application list
-    ibmcloud ce application get --name "$WEBAPI"
+    ibmcloud ce application get --name "$WEBAPI" --output json
     WEBAPI_URL=$(ibmcloud ce application get --name "$WEBAPI" -o url)
     echo "Set WEBAPI URL: $WEBAPI_URL"
 }
@@ -337,7 +337,7 @@ function deployWebApp(){
                                    --port 8080 
     
     ibmcloud ce application list
-    ibmcloud ce application get --name "$WEBAPP" -
+    ibmcloud ce application get --name "$WEBAPP" --output json
     WEBAPP_URL=$(ibmcloud ce application get --name "$WEBAPP" -o url)
     echo "Set WEBAPP URL: $WEBAPP_URL"
 }
