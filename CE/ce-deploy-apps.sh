@@ -275,13 +275,13 @@ addRedirectURIAppIDInformation(){
     echo ""
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     #Create file from template
-    sed "s+APPLICATION_REDIRECT_URL+$WEBAPP_URL+g" .appid-configs/add-redirecturis-template.json > ./$ADD_REDIRECT_URIS
+    sed "s+APPLICATION_REDIRECT_URL+$WEBAPP_URL+g" .appid-configs/add-redirecturis-template.json > ./appid-configs/$ADD_REDIRECT_URIS
     result=$(curl -d @./$ADD_REDIRECT_URIS -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/redirect_uris)
     echo "-------------------------"
     echo "Result redirect uris: $result"
     echo "-------------------------"
     echo ""
-    rm -f ./$ADD_REDIRECT_URIS
+    rm -f ./appid-configs/$ADD_REDIRECT_URIS
 }
 
 # **** application and microservices ****
@@ -341,8 +341,6 @@ function deployWebApp(){
     ibmcloud ce application get --name "$WEBAPP"
     WEBAPP_URL=$(ibmcloud ce application get --name "$WEBAPP" -o url)
     echo "Set WEBAPP URL: $WEBAPP_URL"
-
-    # checkKubernetesPod "web-app"
 }
 
 # **** Kubernetes CLI ****
