@@ -6,9 +6,9 @@ export PROJECT_NAME=cloud-native-starter-ce-workshop
 #export PROJECT_NAME=$MYPROJECT
 
 # CE applications
-export WEBAPI=web-api
-export WEBAPP=web-app
-export ARTICELS=articles
+export WEBAPI=web-api-appid
+export WEBAPP=web-app-appid
+export ARTICELS=articles-appid
 
 # App ID
 export APPID_INSTANCE_NAME=cns-example-AppID-automated-tsuedbro
@@ -97,7 +97,7 @@ echo "************************************"
 
 cleanAppIDservice
 
-echo "************************************"
-echo " Clean Code Engine Project $PROJECT_NAME"
-echo "************************************"
+#echo "************************************"
+#echo " Clean Code Engine Project $PROJECT_NAME"
+#echo "************************************"
 #cleanCodeEngineProject
