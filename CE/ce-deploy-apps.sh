@@ -22,9 +22,9 @@ export ARTICEL_URL="http://articles.$NAMESPACE.svc.cluster.local/articlesA"
 
 # Application Images
 
-export WEBAPP_IMAGE="quay.io/$REPOSITORY/web-app-ce-appid:v3"
-export WEBAPI_IMAGE="quay.io/$REPOSITORY/web-api-ce-appid:v3"
-export ARTICLES_IMAGE="quay.io/$REPOSITORY/articles-ce-appid:v3"
+export WEBAPP_IMAGE="quay.io/$REPOSITORY/web-app-ce-appid:v4"
+export WEBAPI_IMAGE="quay.io/$REPOSITORY/web-api-ce-appid:v4"
+export ARTICLES_IMAGE="quay.io/$REPOSITORY/articles-ce-appid:v4"
 
 # AppID Service
 export SERVICE_PLAN="graduated-tier"
@@ -266,7 +266,7 @@ function deployWebAPI(){
 function deployWebApp(){
 
     ibmcloud ce application create --name web-app \
-                                   --image "$WEBAPI_IMAGE" \
+                                   --image "$WEBAPP_IMAGE" \
                                    --cpu "1" \
                                    --memory "2G" \
                                    --env VUE_APP_ROOT="/" \
