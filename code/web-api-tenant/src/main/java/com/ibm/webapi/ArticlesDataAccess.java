@@ -70,6 +70,8 @@ public class ArticlesDataAccess {
         try {
             Object issuer = this.accessToken.getClaim("iss");
             System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.log issuer: " + issuer.toString());
+            Object scope = this.accessToken.getClaim("scope");
+            System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.log scope: " + scope.toString());
             System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.log access token: " + this.accessToken.toString());
             return;
         } catch ( Exception e ) {
