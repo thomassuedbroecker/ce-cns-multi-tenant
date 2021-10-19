@@ -59,7 +59,7 @@ export default {
     }
   },
   data() {
-    console.log("--> Log: webApiUrl " + this.$store.state.endpoints.api + "/articlesA");
+    console.log("-->log: webApiUrl " + this.$store.state.endpoints.api + "/articlesA");
     return {
       webApiUrl: this.$store.state.endpoints.api + "/articlesA",
       articles: [],
@@ -72,7 +72,7 @@ export default {
       this.readArticles();
     },
     readArticles() {
-      console.log("--> log webApiUrl: ", this.webApiUrl);
+      console.log("-->log webApiUrl: ", this.webApiUrl);
       this.loading = true;
       const axiosService = axios.create({
         timeout: 30000,
@@ -82,17 +82,17 @@ export default {
         }
       });
       let that = this;
-      console.log("--> log: readArticles URL : " + this.webApiUrl);
+      console.log("-->log: readArticles URL : " + this.webApiUrl);
       axiosService
         .get(this.webApiUrl)
         .then(function(response) {
           that.articles = response.data;
-          console.log("--> log: readArticles data : " + that.articles);
+          console.log("-->log: readArticles data : " + that.articles);
           that.loading = false;
           that.error = "";
         })
         .catch(function(error) {
-          console.log("--> log: " + error);
+          console.log("-->log: " + error);
           that.loading = false;
           that.error = error;
         });

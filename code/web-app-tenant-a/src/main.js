@@ -21,43 +21,43 @@ let urls;
 /* Authentication init
 /**********************************/
 
-console.log("--> log: Localhost index: ", currentHostname.indexOf('localhost'));
+console.log("-->log: Localhost index: ", currentHostname.indexOf('localhost'));
 
 if (currentHostname.indexOf('localhost') > -1) {
-  console.log("--> log: option 1");
+  console.log("-->log: option 1");
   appid_init = {  
     appid_clientId: window.VUE_APPID_CLIENT_ID,
     appid_discoveryEndpoint: window.VUE_APPID_DISCOVERYENDPOINT
   }
   store.commit("setAPIAndLogin", appid_init);
-  console.log("--> log option 1: appid_init", appid_init.appid_clientId , appid_init.appid_discoveryEndpoint);
+  console.log("-->log option 1: appid_init", appid_init.appid_clientId , appid_init.appid_discoveryEndpoint);
 
   urls = {
     api: window.VUE_APP_WEBAPI
   }
   store.commit("setAPI", urls);
-  console.log("--> log: urls", urls.api);
+  console.log("-->log: urls", urls.api);
 } else {
-  console.log("--> log: option 2");
+  console.log("-->log: option 2");
   appid_init = {  
     appid_clientId: window.VUE_APPID_CLIENT_ID,
     appid_discoveryEndpoint: window.VUE_APPID_DISCOVERYENDPOINT
   }
   store.commit("setAPIAndLogin", appid_init);
-  console.log("--> log option 2: appid_init ", appid_init.appid_clientId , appid_init.appid_discoveryEndpoint);
+  console.log("-->log option 2: appid_init ", appid_init.appid_clientId , appid_init.appid_discoveryEndpoint);
 
   urls = {
     api: window.VUE_APP_WEBAPI
   }
   store.commit("setAPI", urls);
-  console.log("--> log: urls ", store.state.endpoints.api);
+  console.log("-->log: urls ", store.state.endpoints.api);
 }
 
 let initOptions = {
   clientId: store.state.appid_init.appid_clientId , discoveryEndpoint: store.state.appid_init.appid_discoveryEndpoint
 }
 
-console.log("--> log: initOptions ", initOptions.clientId, initOptions.discoveryEndpoint);
+console.log("-->log: initOptions ", initOptions.clientId, initOptions.discoveryEndpoint);
 
 /**********************************/
 /* Functions 
@@ -66,14 +66,14 @@ console.log("--> log: initOptions ", initOptions.clientId, initOptions.discovery
 async function asyncAppIDInit(appID) {
 
   var appID_init_Result = await appID.init(initOptions);
-  console.log("--> log: appID_init_Result ", appID_init_Result);
+  console.log("-->log: appID_init_Result ", appID_init_Result);
   
   try {
     /******************************/
     /* Authentication
     /******************************/
     let tokens = await appID.signin();
-    console.log("--> log: tokens ", tokens);   
+    console.log("-->log: tokens ", tokens);   
     user_info = {
       isAuthenticated: true,
       idToken : tokens.idToken,
@@ -83,7 +83,7 @@ async function asyncAppIDInit(appID) {
     store.commit("login", user_info);
     return true;
   } catch (e) {
-    console.log("--> log: error ", e);
+    console.log("-->log: error ", e);
     return false;
   } 
 };
@@ -94,10 +94,10 @@ async function asyncAppIDInit(appID) {
 let appID = new AppID();
 let init_messsage = "";
 if (!(init_messsage=asyncAppIDInit(appID))) {
-  console.log("--> log: init_messsage : " + init_messsage);
+  console.log("-->log: init_messsage : " + init_messsage);
   window.location.reload();
 } else {
-    console.log("--> log: init_messsage : " + init_messsage);
+    console.log("-->log: init_messsage : " + init_messsage);
     // Vue application instance
     new Vue({
       store,

@@ -296,9 +296,9 @@ function deployArticles(){
                                    --cluster-local                                        
     ibmcloud ce application list
     echo "Search: ($ARTICLES)"
-    ibmcloud ce application get --name "$ARTICLES" --output json
+    ibmcloud ce application get --name "$ARTICLES"
 
-    echo "Set ARTICLES URL: http://$ARTICLES.$NAMESPACE.svc.cluster.local/articles"
+    echo "ARTICLES URL: http://$ARTICLES.$NAMESPACE.svc.cluster.local/articles"
 }
 
 function deployWebAPI(){
@@ -312,14 +312,14 @@ function deployWebAPI(){
                                 --memory "1G" \
                                 --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
                                 --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
-                                --env CNS_ARTICLES_URL_TENANT_A="http://articles.$NAMESPACE.svc.cluster.local/articlesA" \
+                                --env CNS_ARTICLES_URL_TENANT_A="http://$ARTICLES.$NAMESPACE.svc.cluster.local/articlesA" \
                                 --max-scale 1 \
                                 --min-scale 0 \
                                 --port 8080 
     ibmcloud ce application list
     ibmcloud ce application get --name "$WEBAPI" --output json
     WEBAPI_URL=$(ibmcloud ce application get --name "$WEBAPI" -o url)
-    echo "Set WEBAPI URL: $WEBAPI_URL"
+    echo "WEBAPI URL: $WEBAPI_URL"
 }
 
 function deployWebApp(){
@@ -337,9 +337,9 @@ function deployWebApp(){
                                    --port 8080 
     
     ibmcloud ce application list
-    ibmcloud ce application get --name "$WEBAPP" --output json
+    ibmcloud ce application get --name "$WEBAPP"
     WEBAPP_URL=$(ibmcloud ce application get --name "$WEBAPP" -o url)
-    echo "Set WEBAPP URL: $WEBAPP_URL"
+    echo "WEBAPP URL: $WEBAPP_URL"
 }
 
 # **** Kubernetes CLI ****
@@ -441,21 +441,21 @@ echo " articles"
 echo "************************************"
 
 deployArticles
-ibmcloud ce application events --application articles
+ibmcloud ce application events --application $ARTICLES
 
 echo "************************************"
 echo " web-api"
 echo "************************************"
 
 deployWebAPI
-ibmcloud ce application events --application web-api
+ibmcloud ce application events --application $WEBAPI
 
 echo "************************************"
 echo " web-app"
 echo "************************************"
 
 deployWebApp
-ibmcloud ce application events --application web-app
+ibmcloud ce application events --application $WEBAPP
 
 echo "************************************"
 echo " AppID add redirect URI"
