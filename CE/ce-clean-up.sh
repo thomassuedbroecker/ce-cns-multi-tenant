@@ -8,7 +8,7 @@ export PROJECT_NAME=cloud-native-starter-ce-workshop
 # CE applications
 export WEBAPI=web-api-appid
 export WEBAPP=web-app-appid
-export ARTICELS=articles-appid
+export ARTICLES=articles-appid
 
 # App ID
 export APPID_INSTANCE_NAME=cns-example-AppID-automated-tsuedbro
@@ -49,7 +49,7 @@ function setupCLIenvCE() {
 function cleanCEapplications () {
     ibmcloud ce application delete --name $WEBAPP  --force
     ibmcloud ce application delete --name $WEBAPI  --force
-    ibmcloud ce application delete --name $ARTICELS  --force
+    ibmcloud ce application delete --name $ARTICLES  --force
 }
 
 function cleanKEYS () { 

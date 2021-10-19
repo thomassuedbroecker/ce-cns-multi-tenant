@@ -29,12 +29,12 @@ export ARTICLES_IMAGE="quay.io/$REPOSITORY/articles-ce-appid:v4"
 # Application Names
 export WEBAPI=web-api-appid
 export WEBAPP=web-app-appid
-export ARTICELS=articles-appid
+export ARTICLES=articles-appid
 
 # Application URLs
 export WEBAPI_URL="http://localhost:8083"
 export WEBAPP_URL="http://localhost:8080"
-export ARTICEL_URL="http://$ARTICELS.$NAMESPACE.svc.cluster.local/articlesA"
+export ARTICEL_URL="http://$ARTICLES.$NAMESPACE.svc.cluster.local/articlesA"
 
 #--------------------
 # App ID
@@ -288,7 +288,7 @@ addRedirectURIAppIDInformation(){
 
 function deployArticles(){
 
-    ibmcloud ce application create --name "$ARTICELS" --image "$ARTICLES_IMAGE" \
+    ibmcloud ce application create --name "$ARTICLES" --image "$ARTICLES_IMAGE" \
                                    --cpu "1" \
                                    --memory "2G" \
                                    --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
@@ -297,14 +297,14 @@ function deployArticles(){
                                    --min-scale 0 \
                                    --cluster-local                                        
     
-    ibmcloud ce application get --name "$ARTICELS"
+    ibmcloud ce application get --name "$ARTICLES"
 
-     echo "Set ARTICELS URL: http://$ARTICELS.$NAMESPACE.svc.cluster.local/articles"
+    echo "Set ARTICLES URL: http://$ARTICLES.$NAMESPACE.svc.cluster.local/articles"
 }
 
 function deployWebAPI(){
 
-    echo "Needed Articles URL: http://$ARTICELS.$NAMESPACE.svc.cluster.local/articlesA"
+    echo "Needed Articles URL: http://$ARTICLES.$NAMESPACE.svc.cluster.local/articlesA"
     
     # Valid vCPU and memory combinations: https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo
     ibmcloud ce application create --name "$WEBAPI" \
@@ -372,7 +372,7 @@ function getKubeContainerLogs(){
     echo " articles logs"
     echo "************************************"
 
-    FIND=$ARTICELS
+    FIND=$ARTICLES
     ARTICLES_LOG=$(kubectl get pod -n $NAMESPACE | grep $FIND | awk '{print $1}')
     echo $ARTICLES_LOG
     kubectl logs $ARTICLES_LOG user-container
@@ -482,5 +482,5 @@ echo "************************************"
 echo " - oAuthServerUrl   : $APPLICATION_OAUTHSERVERURL"
 echo " - discoveryEndpoint: $APPLICATION_DISCOVERYENDPOINT"
 echo " - Web-API          : $WEBAPI_URL"
-echo " - Articles         : http://$ARTICELS.$NAMESPACE.svc.cluster.local/articles"
+echo " - Articles         : http://$ARTICLES.$NAMESPACE.svc.cluster.local/articles"
 echo " - Web-App          : $WEBAPP_URL"

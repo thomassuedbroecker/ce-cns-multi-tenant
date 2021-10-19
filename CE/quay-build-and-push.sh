@@ -22,7 +22,7 @@ echo "************************************"
 cd $ROOT_PATH/code/articles-data-tenant
 docker login quay.io
 docker build -t "quay.io/$REPOSITORY/articles-ce-appid:v4" -f Dockerfile .
-docker push "quay.io/$REPOSITORY/articles-ce-appid:v3"
+docker push "quay.io/$REPOSITORY/articles-ce-appid:v4"
 
 echo ""
 
