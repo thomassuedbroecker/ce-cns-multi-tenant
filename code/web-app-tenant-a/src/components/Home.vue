@@ -58,7 +58,7 @@ export default {
     }
   },
   data() {
-    console.log("--> Log: webApiUrl" + this.$store.state.endpoints.api + "/articlesA");
+    console.log("--> Log: webApiUrl " + this.$store.state.endpoints.api + "/articlesA");
     return {
       webApiUrl: this.$store.state.endpoints.api + "/articlesA",
       articles: [],

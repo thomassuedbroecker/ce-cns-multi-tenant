@@ -21,28 +21,43 @@ let urls;
 /* Authentication init
 /**********************************/
 
+console.log("--> log: Localhost index: ", currentHostname.indexOf('localhost'));
+
 if (currentHostname.indexOf('localhost') > -1) {
   console.log("--> log: option 1");
-  appid_init = {
-    
-    //web-app-tenant-a-single
+  appid_init = {  
     appid_clientId: window.VUE_APPID_CLIENT_ID,
-    appid_discoveryEndpoint: window.VUE_APPID_DISCOVERYENDPOINT,  
-    cns: 'http://localhost:8080'
+    appid_discoveryEndpoint: window.VUE_APPID_DISCOVERYENDPOINT
   }
   store.commit("setAPIAndLogin", appid_init);
-  console.log("--> log: appid_init", appid_init);
+  console.log("--> log option 1: appid_init", appid_init.appid_clientId , appid_init.appid_discoveryEndpoint);
 
   urls = {
-    api: window.VUE_APP_WEPAPI,
+    api: window.VUE_APP_WEPAPI
   }
   store.commit("setAPI", urls);
-  console.log("--> log: urls", urls);
+  console.log("--> log: urls", urls.api);
+} else {
+  console.log("--> log: option 2");
+  appid_init = {  
+    appid_clientId: window.VUE_APPID_CLIENT_ID,
+    appid_discoveryEndpoint: window.VUE_APPID_DISCOVERYENDPOINT
+  }
+  store.commit("setAPIAndLogin", appid_init);
+  console.log("--> log option 2: appid_init ", appid_init.appid_clientId , appid_init.appid_discoveryEndpoint);
+
+  urls = {
+    api: window.VUE_APP_WEPAPI
+  }
+  store.commit("setAPI", urls.api);
+  console.log("--> log: urls ", urls.api);
 }
 
 let initOptions = {
   clientId: store.state.appid_init.appid_clientId , discoveryEndpoint: store.state.appid_init.appid_discoveryEndpoint
 }
+
+console.log("--> log: initOptions ", initOptions.clientId, initOptions.discoveryEndpoint);
 
 /**********************************/
 /* Functions 

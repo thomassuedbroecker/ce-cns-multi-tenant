@@ -85,8 +85,6 @@ function setupCLIenvCE() {
   #to use the kubectl commands
   ibmcloud ce project select -n $PROJECT_NAME --kubecfg
   
-  # NAMESPACE=$(kubectl get namespaces | awk '/NAME/ { getline; print $0;}' | awk '{print $1;}')
-  # NAMESPACE=$(ibmcloud ce project get --name $PROJECT_NAME --output json | sed -n 's|.*"namespace":"\([^"]*\)".*|\1|p')
   NAMESPACE=$(ibmcloud ce project get --name $PROJECT_NAME --output json | grep "namespace" | awk '{print $2;}' | sed 's/"//g' | sed 's/,//g')
   echo "Namespace: $NAMESPACE"
   kubectl get pods -n $NAMESPACE
@@ -102,7 +100,6 @@ function setupCLIenvCE() {
     echo "The script exits here!"
     exit 1
   fi
- 
 }
 
 # **** AppID ****
@@ -258,7 +255,8 @@ configureAppIDInformation(){
     echo ""
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     echo "POST url: $MANAGEMENTURL/config/ui/media?mediaType=logo"
-    result=$(curl -F "file=@./$ADD_IMAGE" -H "Content-Type: multipart/form-data" -X POST -v -H "Authorization: Bearer $OAUTHTOKEN" "$MANAGEMENTURL/config/ui/mediamedia?mediaType=logo")
+    #result=$(curl -F "file=@./$ADD_IMAGE" -H "Content-Type: multipart/form-data" -X POST -v -H "Authorization: Bearer $OAUTHTOKEN" "$MANAGEMENTURL/config/ui/mediamedia?mediaType=logo")
+    result=$(curl -F "file=@./$ADD_IMAGE" -H "Content-Type: multipart/form-data" -X POST -H "Authorization: Bearer $OAUTHTOKEN" "$MANAGEMENTURL/config/ui/mediamedia?mediaType=logo")
     echo "-------------------------"
     echo "Result import: $result"
     echo "-------------------------"
@@ -275,13 +273,13 @@ addRedirectURIAppIDInformation(){
     echo ""
     OAUTHTOKEN=$(ibmcloud iam oauth-tokens | awk '{print $4;}')
     #Create file from template
-    sed "s+APPLICATION_REDIRECT_URL+$WEBAPP_URL+g" ./appid-configs/add-redirecturis-template.json > ./appid-configs/$ADD_REDIRECT_URIS
+    sed "s+APPLICATION_REDIRECT_URL+$WEBAPP_URL+g" ./appid-configs/add-redirecturis-template.json > ./$ADD_REDIRECT_URIS
     result=$(curl -d @./$ADD_REDIRECT_URIS -H "Content-Type: application/json" -X PUT -H "Authorization: Bearer $OAUTHTOKEN" $MANAGEMENTURL/config/redirect_uris)
     echo "-------------------------"
     echo "Result redirect uris: $result"
     echo "-------------------------"
     echo ""
-    rm -f ./appid-configs/$ADD_REDIRECT_URIS
+    # rm -f ./$ADD_REDIRECT_URIS
 }
 
 # **** application and microservices ****
@@ -289,14 +287,15 @@ addRedirectURIAppIDInformation(){
 function deployArticles(){
 
     ibmcloud ce application create --name "$ARTICLES" --image "$ARTICLES_IMAGE" \
-                                   --cpu "1" \
-                                   --memory "2G" \
+                                   --cpu "0.25" \
+                                   --memory "0.5G" \
                                    --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
                                    --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
                                    --max-scale 1 \
                                    --min-scale 0 \
                                    --cluster-local                                        
-    
+    ibmcloud ce application list
+    echo "Search: ($ARTICLES)"
     ibmcloud ce application get --name "$ARTICLES"
 
     echo "Set ARTICLES URL: http://$ARTICLES.$NAMESPACE.svc.cluster.local/articles"
@@ -309,27 +308,26 @@ function deployWebAPI(){
     # Valid vCPU and memory combinations: https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo
     ibmcloud ce application create --name "$WEBAPI" \
                                 --image "$WEBAPI_IMAGE" \
-                                --cpu "1" \
-                                --memory "2G" \
+                                --cpu "0.5" \
+                                --memory "1G" \
                                 --env APPID_AUTH_SERVER_URL_TENANT_A="$APPLICATION_OAUTHSERVERURL" \
                                 --env APPID_CLIENT_ID_TENANT_A="$APPLICATION_CLIENTID" \
                                 --env CNS_ARTICLES_URL_TENANT_A="http://articles.$NAMESPACE.svc.cluster.local/articlesA" \
                                 --max-scale 1 \
                                 --min-scale 0 \
                                 --port 8080 
-
+    ibmcloud ce application list
     ibmcloud ce application get --name "$WEBAPI"
     WEBAPI_URL=$(ibmcloud ce application get --name "$WEBAPI" -o url)
     echo "Set WEBAPI URL: $WEBAPI_URL"
-
 }
 
 function deployWebApp(){
 
     ibmcloud ce application create --name "$WEBAPP" \
                                    --image "$WEBAPP_IMAGE" \
-                                   --cpu "1" \
-                                   --memory "2G" \
+                                   --cpu 0.5 \
+                                   --memory 1G \
                                    --env VUE_APP_ROOT="/" \
                                    --env VUE_APP_WEBAPI="$WEBAPI_URL/articlesA" \
                                    --env VUE_APPID_CLIENT_ID="$APPLICATION_CLIENTID" \
@@ -337,8 +335,9 @@ function deployWebApp(){
                                    --max-scale 1 \
                                    --min-scale 0 \
                                    --port 8080 
-
-    ibmcloud ce application get --name "$WEBAPP"
+    
+    ibmcloud ce application list
+    ibmcloud ce application get --name "$WEBAPP" -
     WEBAPP_URL=$(ibmcloud ce application get --name "$WEBAPP" -o url)
     echo "Set WEBAPP URL: $WEBAPP_URL"
 }
