@@ -61,7 +61,7 @@ public class ArticlesDataAccess {
             return articlesServiceA.getArticlesFromService(amount);
         } catch (Exception e) {
             System.err.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles: Cannot connect to articles service");
-            System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles URL: " + used_url);
+            System.out.println("-->log: com.ibm.web-api.ArticlesDataAccess.getArticles URL: " + articles_url_tenant_A);
             throw new NoConnectivity(e);
         }
     }
